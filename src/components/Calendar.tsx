@@ -45,7 +45,7 @@ const HeaderButtons: React.FC = () => {
 
     return (
         <>
-            <div className="flex justify-between items-center px-4 py-2">
+            <div className="flex border-solid border-b-2 border-sky-600 justify-between items-center px-4 py-2">
                 <div>
                     <Button label="Add Event +" onClick={handleAddEvent}/>
                 </div>
