@@ -64,8 +64,20 @@ const HeaderButtons: React.FC = () => {
     );
 }
 
-
-
+const Day = ({ day, currentDate, isToday}: { day: number, currentDate:Date, isToday:boolean}) => {
+    const handleDayClick = () => {
+        console.log('Day clicked:', currentDate.toDateString());
+    }
+    
+    return (
+        <div 
+            className={`relative px-3 py-2 cursor-pointer ${isToday ? 'bg-white' : 'bg-gray-50 text-gray-500'}`}
+            onClick={handleDayClick}
+        >
+             <time dateTime={currentDate.toISOString()}>{day}</time>
+        </div>
+    );
+}
 
 function generateCalendarGrid(currentMonthIndex: number, currentYear: number): JSX.Element {
     const daysInMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
@@ -74,7 +86,7 @@ function generateCalendarGrid(currentMonthIndex: number, currentYear: number): J
     const calendarGrid: JSX.Element[] = [];
 
     // Generate empty cells for days before the first day of the month
-    for (let i = 0; i < firstDayOfMonth; i++) {
+    for (let i = 0; i < firstDayOfMonth-1; i++) {
         calendarGrid.push(
             <div key={`empty-${i}`} className="relative bg-gray-50 px-3 py-2 text-gray-500"></div>
         );
@@ -85,9 +97,7 @@ function generateCalendarGrid(currentMonthIndex: number, currentYear: number): J
         const currentDate = new Date(currentYear, currentMonthIndex, day);
         const isToday = currentDate.toDateString() === new Date().toDateString();
         calendarGrid.push(
-            <div key={`day-${day}`} className={`relative px-3 py-2 ${isToday ? 'bg-white' : 'bg-gray-50 text-gray-500'}`}>
-                <time dateTime={currentDate.toISOString()}>{day}</time>
-            </div>
+            <Day day={day} currentDate={currentDate} isToday={isToday} />
         );
     }
 
@@ -119,6 +129,44 @@ function CalendarHeader({ currentMonthIndex, currentYear, onNextMonth, onPreviou
             </div>
         </div>
     );
+}
+
+function WeekDays(){
+    return (
+        <>
+            <div className="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
+                <div className="flex justify-center bg-white py-2">
+                    <span>M</span>
+                    <span className="sr-only sm:not-sr-only">on</span>
+                </div>
+                <div className="flex justify-center bg-white py-2">
+                    <span>T</span>
+                    <span className="sr-only sm:not-sr-only">ue</span>
+                </div>
+                <div className="flex justify-center bg-white py-2">
+                    <span>W</span>
+                    <span className="sr-only sm:not-sr-only">ed</span>
+                </div>
+                <div className="flex justify-center bg-white py-2">
+                    <span>T</span>
+                    <span className="sr-only sm:not-sr-only">hu</span>
+                </div>
+                <div className="flex justify-center bg-white py-2">
+                    <span>F</span>
+                    <span className="sr-only sm:not-sr-only">ri</span>
+                </div>
+                <div className="flex justify-center bg-white py-2">
+                    <span>S</span>
+                    <span className="sr-only sm:not-sr-only">at</span>
+                </div>
+                <div className="flex justify-center bg-white py-2">
+                    <span>S</span>
+                    <span className="sr-only sm:not-sr-only">un</span>
+                </div>
+            </div>
+        </>
+    );
+
 }
 
 
@@ -157,36 +205,7 @@ function Calendar({ initialMonthIndex = new Date().getMonth(), initialYear = new
                     onPreviousMonth={handlePreviousMonth}
                 />
                 <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
-                    <div className="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
-                        <div className="flex justify-center bg-white py-2">
-                            <span>M</span>
-                            <span className="sr-only sm:not-sr-only">on</span>
-                        </div>
-                        <div className="flex justify-center bg-white py-2">
-                            <span>T</span>
-                            <span className="sr-only sm:not-sr-only">ue</span>
-                        </div>
-                        <div className="flex justify-center bg-white py-2">
-                            <span>W</span>
-                            <span className="sr-only sm:not-sr-only">ed</span>
-                        </div>
-                        <div className="flex justify-center bg-white py-2">
-                            <span>T</span>
-                            <span className="sr-only sm:not-sr-only">hu</span>
-                        </div>
-                        <div className="flex justify-center bg-white py-2">
-                            <span>F</span>
-                            <span className="sr-only sm:not-sr-only">ri</span>
-                        </div>
-                        <div className="flex justify-center bg-white py-2">
-                            <span>S</span>
-                            <span className="sr-only sm:not-sr-only">at</span>
-                        </div>
-                        <div className="flex justify-center bg-white py-2">
-                            <span>S</span>
-                            <span className="sr-only sm:not-sr-only">un</span>
-                        </div>
-                    </div>
+                    <WeekDays />
                     {generateCalendarGrid(currentMonthIndex, currentYear)}
                 </div>
             </div>
