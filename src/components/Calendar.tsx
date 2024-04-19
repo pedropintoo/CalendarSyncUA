@@ -64,8 +64,20 @@ const HeaderButtons: React.FC = () => {
     );
 }
 
-
-
+const Day = ({ day, currentDate, isToday}: { day: number, currentDate:Date, isToday:boolean}) => {
+    const handleDayClick = () => {
+        console.log('Day clicked:', currentDate.toDateString());
+    }
+    
+    return (
+        <div 
+            className={`relative px-3 py-2 ${isToday ? 'bg-white' : 'bg-gray-50 text-gray-500'}`}
+            onClick={handleDayClick}
+        >
+             <time dateTime={currentDate.toISOString()}>{day}</time>
+        </div>
+    );
+}
 
 function generateCalendarGrid(currentMonthIndex: number, currentYear: number): JSX.Element {
     const daysInMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
@@ -85,9 +97,7 @@ function generateCalendarGrid(currentMonthIndex: number, currentYear: number): J
         const currentDate = new Date(currentYear, currentMonthIndex, day);
         const isToday = currentDate.toDateString() === new Date().toDateString();
         calendarGrid.push(
-            <div key={`day-${day}`} className={`relative px-3 py-2 ${isToday ? 'bg-white' : 'bg-gray-50 text-gray-500'}`}>
-                <time dateTime={currentDate.toISOString()}>{day}</time>
-            </div>
+            <Day day={day} currentDate={currentDate} isToday={isToday} />
         );
     }
 
