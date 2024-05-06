@@ -42,12 +42,20 @@ function MainStructure() {
         END:VCALENDAR`;
         handleAddEvent({id: "1", title: "Meeting", startDate: new Date("2021-09-01T10:00:00Z"), endDate: new Date("2021-09-01T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData});
     }
+
+    const tags = {
+        "BD": "text-red-500",
+        "C": "text-green-500",
+        "CD": "text-yellow-500",
+        "IHC": "text-blue-500",
+        "PDS": "text-orange-500"
+    }
     
     return ( 
         // <!-- Main  -->
         <>
         <div className="px-4 py-4 mx-auto grid lg:grid-cols-6 gap-2 min-h-screen">
-            <Filter allEvents={allEventsICS} setFilteredEvents={setFilteredEventsICS} />
+            <Filter tags={tags} allEvents={allEventsICS} setFilteredEvents={setFilteredEventsICS} />
             <Calendar allEvents={allEventsICS} filteredEvents={filteredEventsICS} setAllEvents={setAllEventsICS} />
             <Tasks allEvents={filteredEventsICS} />
         </div>
