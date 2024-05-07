@@ -217,7 +217,6 @@ function Calendar({ initialMonthIndex = new Date().getMonth(), initialYear = new
     const handleNextMonth = () => {
         setCurrentMonthIndex(prevIndex => {
             if (prevIndex === 11) {
-                console.log("AAA");
                 setCurrentYear(prevYear => prevYear + 1);
                 return 0;
             }
