@@ -27,12 +27,14 @@ function Filter({ tags, allEvents, setFilteredEvents }) {
 
   const filterEvents = (selectedTags) => {
     const filteredEvents = allEvents.filter(event => {
-      return Object.keys(selectedTags).every(tag => {
-        return selectedTags[tag] || event.tags.includes(tag);
-      });
+        return selectedTags[event.tagName];
     });
+
+    console.log('Filtered Events:', filteredEvents); // Adicionando o console.log
+
     setFilteredEvents(filteredEvents);
-  };
+};
+
 
   return (
     // <!-- Main  -->
@@ -46,7 +48,7 @@ function Filter({ tags, allEvents, setFilteredEvents }) {
           <label htmlFor="selectAll" className="text-bg text-black-500 ml-2">Select All</label>
         </div>
         {Object.entries(tags).map(([tagName, colorClass]) => (
-          <div key={tagName} className="flex items-center mb-2">
+          <div className="flex items-center mb-2">
             <input
               type="checkbox"
               id={tagName}
@@ -54,7 +56,7 @@ function Filter({ tags, allEvents, setFilteredEvents }) {
               checked={selectedTags[tagName] || false}
               onChange={() => handleTagCheckboxChange(tagName)}
             />
-            <label htmlFor={tagName} className={`text-bg ${colorClass} ml-2`}>
+            <label htmlFor={tagName} className={`text-bg ${colorClass[0]} ml-2`}>
               {tagName}
             </label>
           </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Event from './Event';
 
 interface ButtonProps {
     label: string;
@@ -64,7 +65,7 @@ const HeaderButtons: React.FC = () => {
     );
 }
 
-const Day = ({ day, currentDate, isToday}: { day: number, currentDate:Date, isToday:boolean}) => {
+const Day = ({ day, currentDate, isToday, events}: { day: number, currentDate:Date, isToday:boolean}) => {
     const handleDayClick = () => {
         console.log('Day clicked:', currentDate.toDateString());
     }
@@ -76,19 +77,24 @@ const Day = ({ day, currentDate, isToday}: { day: number, currentDate:Date, isTo
                 onClick={handleDayClick}
             >
                  <time dateTime={currentDate.toISOString()}>{day}</time>
+                <div>
+                    {events.map((event, index) => (
+                        <Event handleEvent={()=>{console.log("Event")}} color={event.tagColor} name={event.title} />
+                    ))}
+                </div>
             </div>
         </>
     );
 }
 
-function generateCalendarGrid(currentMonthIndex: number, currentYear: number): JSX.Element {
+function generateCalendarGrid(currentMonthIndex: number, currentYear: number, filteredEvents): JSX.Element {
     const daysInMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
     const firstDayOfMonth = new Date(currentYear, currentMonthIndex, 1).getDay();
 
     const calendarGrid: JSX.Element[] = [];
 
     // Generate empty cells for days before the first day of the month
-    for (let i = 0; i < firstDayOfMonth-1; i++) {
+    for (let i = 0; i < firstDayOfMonth - 1; i++) {
         calendarGrid.push(
             <div key={`empty-${i}`} className="relative bg-gray-50 px-3 py-2 text-gray-500"></div>
         );
@@ -98,8 +104,15 @@ function generateCalendarGrid(currentMonthIndex: number, currentYear: number): J
     for (let day = 1; day <= daysInMonth; day++) {
         const currentDate = new Date(currentYear, currentMonthIndex, day);
         const isToday = currentDate.toDateString() === new Date().toDateString();
+        
+        // Filter events for the current day
+        const eventsForCurrentDay = filteredEvents.filter(event => {
+            const eventDate = event.startDate;
+            return eventDate.toDateString() === currentDate.toDateString();
+        });
+        
         calendarGrid.push(
-            <Day day={day} currentDate={currentDate} isToday={isToday} />
+            <Day key={`day-${day}`} day={day} currentDate={currentDate} isToday={isToday} events={eventsForCurrentDay} />
         );
     }
 
@@ -173,7 +186,7 @@ function WeekDays(){
 
 
 
-function Calendar({ initialMonthIndex = new Date().getMonth(), initialYear = new Date().getFullYear() }) {
+function Calendar({ initialMonthIndex = new Date().getMonth(), initialYear = new Date().getFullYear(), allEvents, filteredEvents, setAllEvents }) {
     const [currentMonthIndex, setCurrentMonthIndex] = useState(initialMonthIndex);
     const [currentYear, setCurrentYear] = useState(initialYear);
 
@@ -208,7 +221,7 @@ function Calendar({ initialMonthIndex = new Date().getMonth(), initialYear = new
                 />
                 <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
                     <WeekDays />
-                    {generateCalendarGrid(currentMonthIndex, currentYear)}
+                    {generateCalendarGrid(currentMonthIndex, currentYear, filteredEvents)}
                 </div>
             </div>
         </>
