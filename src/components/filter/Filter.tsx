@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
+import { useStructureContext } from '../contexts/StructureContext';
 
-function Filter({ tags, allEvents, setFilteredEvents }) {
+function Filter() {
+  // Structure Context
+  const SC = useStructureContext();
+
   const [selectAll, setSelectAll] = useState(false);
   const [selectedTags, setSelectedTags] = useState({});
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     const newSelectedTags = {};
-    Object.keys(tags).forEach(tagName => {
+    Object.keys(SC.tags).forEach(tagName => {
       newSelectedTags[tagName] = !selectAll;
     });
     setSelectedTags(newSelectedTags);
@@ -26,13 +30,13 @@ function Filter({ tags, allEvents, setFilteredEvents }) {
   };
 
   const filterEvents = (selectedTags) => {
-    const filteredEvents = allEvents.filter(event => {
+    const filteredEvents = SC.allEventsICS.filter(event => {
         return selectedTags[event.tagName];
     });
 
     console.log('Filtered Events:', filteredEvents); // Adicionando o console.log
 
-    setFilteredEvents(filteredEvents);
+    SC.setFilteredEventsICS(filteredEvents);
 };
 
 
@@ -47,7 +51,7 @@ function Filter({ tags, allEvents, setFilteredEvents }) {
           <input type="checkbox" id="selectAll" className="mr-2 ml-3" checked={selectAll} onChange={handleSelectAll} />
           <label htmlFor="selectAll" className="text-bg text-black-500 ml-2">Select All</label>
         </div>
-        {Object.entries(tags).map(([tagName, colorClass]) => (
+        {Object.entries(SC.tags).map(([tagName, colorClass]) => (
           <div className="flex items-center mb-2">
             <input
               type="checkbox"

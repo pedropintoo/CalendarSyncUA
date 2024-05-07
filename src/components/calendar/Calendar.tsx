@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Event from './Event';
-import Modal from './Import';
+import Modal from './Import'
+import { useStructureContext } from '../contexts/StructureContext';
 
 interface ButtonProps {
     label: string;
@@ -206,13 +207,17 @@ function WeekDays() {
 
 
 
-function Calendar({ initialMonthIndex = new Date().getMonth(), initialYear = new Date().getFullYear(), allEvents, filteredEvents, setAllEvents }) {
+function Calendar({ initialMonthIndex = new Date().getMonth(), initialYear = new Date().getFullYear()}) {
+    // Structure Context
+    const SC = useStructureContext();
+
     const [currentMonthIndex, setCurrentMonthIndex] = useState(initialMonthIndex);
     const [currentYear, setCurrentYear] = useState(initialYear);
 
     const handleNextMonth = () => {
         setCurrentMonthIndex(prevIndex => {
             if (prevIndex === 11) {
+                console.log("AAA");
                 setCurrentYear(prevYear => prevYear + 1);
                 return 0;
             }
@@ -241,7 +246,7 @@ function Calendar({ initialMonthIndex = new Date().getMonth(), initialYear = new
                 />
                 <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
                     <WeekDays />
-                    {generateCalendarGrid(currentMonthIndex, currentYear, filteredEvents)}
+                    {generateCalendarGrid(currentMonthIndex, currentYear, SC.filteredEventsICS)}
                 </div>
             </div>
         </>
