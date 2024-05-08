@@ -1,7 +1,8 @@
-import Calendar from "./Calendar";
+import Calendar from "./calendar/Calendar";
 import React, { useState } from 'react';
-import Filter from "./Filter";
-import Tasks from "./Tasks";
+import Filter from "./filter/Filter";
+import Tasks from "./tasks/Tasks";
+import { StructureContext } from "./contexts/StructureContext";
 
 interface EventICSProps {
     id: string;
@@ -17,7 +18,7 @@ interface EventICSProps {
 
 
 function MainStructure() {
-    
+
     const [allEventsICS, setAllEventsICS] = useState<EventICSProps[]>([]);
     const [filteredEventsICS, setFilteredEventsICS] = useState<EventICSProps[]>([]);
 
@@ -64,9 +65,11 @@ function MainStructure() {
         // <!-- Main  -->
         <>
         <div className="px-4 py-4 mx-auto grid lg:grid-cols-6 gap-2 min-h-screen">
-            <Filter tags={tags} allEvents={allEventsICS} setFilteredEvents={setFilteredEventsICS} />
-            <Calendar allEvents={allEventsICS} filteredEvents={filteredEventsICS} setAllEvents={setAllEventsICS} />
-            <Tasks/>
+            <StructureContext.Provider value={{allEventsICS, setAllEventsICS, filteredEventsICS, setFilteredEventsICS, tags}}>
+                <Filter/>
+                <Calendar/>
+                <Tasks/>
+            </StructureContext.Provider>
         </div>
         <button onClick={addDEMOData} className="btn-square bg-sky-900 text-slate-50 w-100">Demo data</button>
         </>

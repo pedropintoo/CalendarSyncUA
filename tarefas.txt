@@ -1,0 +1,14 @@
+!!! DAR CONTEXTO !!!
+
+Aluno: (tirar o lixo dos imports)
+  - Importar calendario do elearning (2 tarefas) e do paco (e verificar) - sem algumas coisas... IMPORTANTE!!!!
+  - filtrar.... e por tipo de coisa
+  ** - Adicionar "Apresentação IHC" para dia 16/10/2024 das 10:00 às 11:00 (com a tag IHC)
+  - Exportar (no formato) calendario construido.
+
+Professor:
+  - Importar calendario do elearning e do paco
+  - Mudar a "Deadline de IHC" para dia 18/10/2024
+  - Exportar calendario construido.
+  
+  
