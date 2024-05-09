@@ -1,7 +1,7 @@
 import {useState, createContext} from 'react';
 import React from 'react';
 
-interface EventICSProps {
+export interface EventICSProps {
     id: string;
     title: string;
     startDate: Date;
@@ -13,7 +13,7 @@ interface EventICSProps {
     tagColor: string;
 }
 
-interface StructureContextType {
+export interface StructureContextType {
     allEventsICS: EventICSProps[];
     setAllEventsICS: (events: EventICSProps[]) => void;
     filteredEventsICS: EventICSProps[];
