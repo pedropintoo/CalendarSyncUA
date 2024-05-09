@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Event from './Event';
 import Modal from './Import'
-import { StructureContext, useStructureContext } from '../contexts/StructureContext';
+import { useStructureContext } from '../contexts/StructureContext';
 import { CalendarContext, useCalendarContext } from '../contexts/CalendarContext';
 
 interface ButtonProps {
@@ -153,7 +153,7 @@ const Day = ({ date }: { date: Date }) => {
 
     // Filter events that has: startEvent <= currentDate <= endEvent
     const events = SC.filteredEventsICS.filter(event => {
-        return event.startDate.valueOf() <= date.valueOf() && date.valueOf() <= event.endDate.valueOf();
+        return event.startDate.getDate() == date.getDate();
     });
 
     const isMonth = date.getMonth() == CC.currentMonthIndex;
