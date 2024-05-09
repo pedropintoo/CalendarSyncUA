@@ -4,8 +4,8 @@ import React from 'react';
 export interface CalendarContextType {
     currentMonth: number;
     currentYear: number;
-    setMonth: (monthIndex: number) => void;
-    setYear: (year: number) => void;
+    setMonth: (month: React.SetStateAction<number>) => void;
+    setYear: (year: React.SetStateAction<number>) => void;
 }
 
 

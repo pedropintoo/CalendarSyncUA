@@ -164,7 +164,8 @@ function CalendarGrid() {
     const CC = useCalendarContext();
     const SC = useStructureContext();
 
-    const daysInMonth = new Date(CC.currentYear, CC.currentMonth + 1, 0).getDate();
+    const daysInMonth = new Date(CC.currentYear, CC.currentMonth, 0).getDate();
+    console.log(daysInMonth)
     const firstDayOfMonth = new Date(CC.currentYear, CC.currentMonth, 1).getDay();
 
     const calendarGrid: JSX.Element[] = [];
@@ -223,16 +224,9 @@ function Calendar() {
     // Calendar Context
     const CC = useCalendarContext();
 
-    const [currentMonth, setcurrentMonth] = useState(CC.currentMonth);
-    const [currentYear, setCurrentYear] = useState(CC.currentYear);
+    const [currentMonth, setMonth] = useState(CC.currentMonth);
+    const [currentYear, setYear] = useState(CC.currentYear);
     
-    const setMonth = (monthIndex: number) => {
-        setcurrentMonth(monthIndex);
-    }
-    const setYear = (year: number) => {
-        setCurrentYear(year);
-    }
-
     return (
         <>
         <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600 rounded">
