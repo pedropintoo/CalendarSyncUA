@@ -2,18 +2,18 @@ import {createContext} from 'react';
 import React from 'react';
 
 export interface CalendarContextType {
-    currentMonth: number;
+    currentMonthIndex: number;
     currentYear: number;
-    setMonth: (month: React.SetStateAction<number>) => void;
+    setMonthIndex: (monthIndex: React.SetStateAction<number>) => void;
     setYear: (year: React.SetStateAction<number>) => void;
 }
 
 
 
 export const CalendarContext = createContext<CalendarContextType>({
-    currentMonth: new Date().getMonth() + 1,
+    currentMonthIndex: new Date().getMonth(),
     currentYear: new Date().getFullYear(),
-    setMonth: () => {},
+    setMonthIndex: () => {},
     setYear: () => {}
 });
 

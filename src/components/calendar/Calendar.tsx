@@ -10,7 +10,7 @@ interface ButtonProps {
 }
 
 const Months = [
-    "", "January", "February", "March", "April", "May", "June",
+    "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
 
@@ -87,50 +87,28 @@ const HeaderButtons: React.FC = () => {
     );
 }
 
-const Day = ({ day, currentDate, isToday, events }: { day: number, currentDate: Date, isToday: boolean }) => {
-    const handleDayClick = () => {
-        console.log('Day clicked:', currentDate.toDateString());
-    }
-
-    return (
-        <>
-            <div
-                className={`relative px-3 py-2 cursor-pointer h-20 ${isToday ? 'bg-white' : 'bg-gray-50 text-gray-500'}`}
-                onClick={handleDayClick}
-            >
-                <time dateTime={currentDate.toISOString()}>{day}</time>
-                <div>
-                    {events.map((event, index) => (
-                        <Event handleEvent={() => { console.log("Event") }} color={event.tagColor} name={event.title} />
-                    ))}
-                </div>
-            </div>
-        </>
-    );
-}
-
 // DONE
 function CalendarHeader() {
     const CC = useCalendarContext()
 
     const handleNextMonth = () => {
-        if (CC.currentMonth === 12) {
-            CC.setMonth(1);
+        if (CC.currentMonthIndex === 11) {
+            CC.setMonthIndex(0);
             CC.setYear(CC.currentYear + 1);
         } else {
-            CC.setMonth(CC.currentMonth + 1);
+            CC.setMonthIndex(CC.currentMonthIndex + 1);
         }
     }
     const handlePrevMonth = () => {
-        if (CC.currentMonth === 1) {
-            CC.setMonth(12);
+        if (CC.currentMonthIndex === 0) {
+            CC.setMonthIndex(11);
             CC.setYear(CC.currentYear - 1);
         } else {
-            CC.setMonth(CC.currentMonth - 1);
+            CC.setMonthIndex(CC.currentMonthIndex - 1);
         }
     }
 
-    console.log("Current Date: ", CC.currentMonth, CC.currentYear)
+    console.log("Current Date: ", CC.currentMonthIndex, CC.currentYear)
 
     return (
         <>
@@ -143,7 +121,7 @@ function CalendarHeader() {
                             <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
                         </svg>
                     </button>
-                    <button type="button" className="font-semibold ">{Months[CC.currentMonth]}</button>
+                    <button type="button" className="font-semibold ">{Months[CC.currentMonthIndex]}</button>
                     <button type="button" className="">{CC.currentYear}</button>
                     <button onClick={handleNextMonth} type="button" className="flex align-center justify-center py-2">
                         <span className="sr-only">Next month</span>
@@ -160,37 +138,76 @@ function CalendarHeader() {
     );
 }
 
+const Day = ({ date }: { date: Date }) => {
+    
+    const SC = useStructureContext();
+    const CC = useCalendarContext();
+
+    const handleDayClick = () => {
+        console.log('Day clicked:', date.toDateString());
+        console.log(isMonth)
+    }
+
+    const currentDayOfMonth = date.getDate();
+    const isToday = date.toDateString() === new Date().toDateString();
+
+    // Filter events that has: startEvent <= currentDate <= endEvent
+    const events = SC.filteredEventsICS.filter(event => {
+        return event.startDate.valueOf() <= date.valueOf() && date.valueOf() <= event.endDate.valueOf();
+    });
+
+    const isMonth = date.getMonth() == CC.currentMonthIndex;
+
+    return (
+        <>
+            <div
+                className={`relative px-3 py-2 cursor-pointer h-36 ${isToday ? 'border-2 border-sky-100' : ''} bg-white ${isMonth? '': 'bg-gray-100'}`}
+                onClick={handleDayClick}
+            >
+                <p className={`${isToday ? 'flex items-center justify-center font-semibold border border-sky-300 rounded-full w-5 h-5' : ''}`}>{currentDayOfMonth}</p>
+                <div>
+                    {events.map((event, index) => (
+                        <Event handleEvent={() => { console.log("Event") }} color={event.tagColor} name={event.title} />
+                    ))}
+                </div>
+            </div>
+        </>
+    );
+}
+
+// Before reading take a look in Data Class from typescript documentation...
 function CalendarGrid() {
     const CC = useCalendarContext();
-    const SC = useStructureContext();
-
-    const daysInMonth = new Date(CC.currentYear, CC.currentMonth, 0).getDate();
-    console.log(daysInMonth)
-    const firstDayOfMonth = new Date(CC.currentYear, CC.currentMonth, 1).getDay();
 
     const calendarGrid: JSX.Element[] = [];
 
-    // Generate empty cells for days before the first day of the month
-    for (let i = 0; i < firstDayOfMonth - 1; i++) {
-        calendarGrid.push(
-            <div key={`empty-${i}`} className="relative bg-slate-200 px-3 py-2 text-gray-500 h-20"></div>
-        );
+    const daysInMonth = new Date(CC.currentYear, CC.currentMonthIndex+1, 0).getDate(); // go to last day..
+    
+    // start week day of the month
+    const firstDayOfMonth = new Date(CC.currentYear, CC.currentMonthIndex, 1).getDay();
+
+    const currentMonth = new Date(CC.currentYear, CC.currentMonthIndex)
+    const prevMonth = new Date(currentMonth.setMonth(currentMonth.getMonth()-1)); // decrease one month
+    const daysInPrevMonth = new Date(prevMonth.getFullYear(), prevMonth.getMonth()+1, 0).getDate();
+
+    // Generate cells for days before the first day of the month
+    for (let offset = firstDayOfMonth - 2; offset >= 0; offset--) {
+        const currentDate = new Date(prevMonth.getFullYear(), prevMonth.getMonth(), daysInPrevMonth - offset);
+        calendarGrid.push(<Day date={currentDate} />);
     }
 
     // Generate cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
-        const currentDate = new Date(CC.currentYear, CC.currentMonth, day);
-        const isToday = currentDate.toDateString() === new Date().toDateString();
+        const currentDate = new Date(CC.currentYear, CC.currentMonthIndex, day);
+        calendarGrid.push(<Day date={currentDate} />);
+    }
 
-        // Filter events for the current day
-        const eventsForCurrentDay = SC.filteredEventsICS.filter(event => {
-            const eventDate = event.startDate;
-            return eventDate.toDateString() === currentDate.toDateString();
-        });
+    const nextMonth = new Date(currentMonth.setMonth(currentMonth.getMonth()+2)); // increase one month
 
-        calendarGrid.push(
-            <Day key={`day-${day}`} day={day} currentDate={currentDate} isToday={isToday} events={eventsForCurrentDay} />
-        );
+    // Generate cells for days after the last day of the month
+    for (let i = 1; calendarGrid.length % 7 != 0; i++) {
+        const currentDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), i);
+        calendarGrid.push(<Day date={currentDate} />);
     }
 
     return (
@@ -224,13 +241,13 @@ function Calendar() {
     // Calendar Context
     const CC = useCalendarContext();
 
-    const [currentMonth, setMonth] = useState(CC.currentMonth);
+    const [currentMonthIndex, setMonthIndex] = useState(CC.currentMonthIndex);
     const [currentYear, setYear] = useState(CC.currentYear);
     
     return (
         <>
         <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600 rounded">
-            <CalendarContext.Provider value={{currentMonth, currentYear, setMonth, setYear}}>
+            <CalendarContext.Provider value={{currentMonthIndex, currentYear, setMonthIndex, setYear}}>
                 <HeaderButtons />
                 <CalendarHeader/>
                 <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
