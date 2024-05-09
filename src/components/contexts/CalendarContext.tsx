@@ -11,7 +11,7 @@ export interface CalendarContextType {
 
 
 export const CalendarContext = createContext<CalendarContextType>({
-    currentMonth: new Date().getMonth(),
+    currentMonth: new Date().getMonth() + 1,
     currentYear: new Date().getFullYear(),
     setMonth: () => {},
     setYear: () => {}

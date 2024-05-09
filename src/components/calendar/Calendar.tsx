@@ -232,7 +232,7 @@ function Calendar() {
     const setYear = (year: number) => {
         setCurrentYear(year);
     }
-
+    console.log("AAA" + new Date().getMonth())
     return (
         <>
         <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600 rounded">
