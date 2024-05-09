@@ -161,10 +161,10 @@ const Day = ({ date }: { date: Date }) => {
     return (
         <>
             <div
-                className={`relative px-3 py-2 cursor-pointer h-36 ${isToday ? 'border-2 border-sky-100' : ''} bg-white ${isMonth? '': 'bg-gray-100'}`}
+                className={`relative px-3 py-2 cursor-pointer h-36 ${isToday ? 'border-2 border-gray-100' : ''} bg-white ${isMonth? '': 'bg-gray-100'}`}
                 onClick={handleDayClick}
             >
-                <p className={`${isToday ? 'flex items-center justify-center font-semibold border border-sky-300 rounded-full w-5 h-5' : ''}`}>{currentDayOfMonth}</p>
+                <p className={`${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-5 h-5' : ''}`}>{currentDayOfMonth}</p>
                 <div>
                     {events.map((event, index) => (
                         <Event handleEvent={() => { console.log("Event") }} color={event.tagColor} name={event.title} />
@@ -211,7 +211,7 @@ function CalendarGrid() {
     }
 
     return (
-        <div className="hidden lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
+        <div className="grid grid-cols-7 grid-rows-6 gap-px">
             {calendarGrid}
         </div>
     );
@@ -246,7 +246,7 @@ function Calendar() {
     
     return (
         <>
-        <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600 rounded">
+        <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600">
             <CalendarContext.Provider value={{currentMonthIndex, currentYear, setMonthIndex, setYear}}>
                 <HeaderButtons />
                 <CalendarHeader/>
