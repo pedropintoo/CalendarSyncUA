@@ -4,9 +4,11 @@ function CalendarEvent({event}: {event: EventICSProps}){
     const SC = useStructureContext();
     
     const color = SC.tags[event.tagName];
+    console.log(`bg-${color}`)
     return (
         <div 
-        className={`bg-${color} text-white rounded`}>
+        className={`text-white p-2 rounded-lg m-1 cursor-pointer`}
+        style={{ backgroundColor: `${color}`}}>
             <h1>{event.title}</h1>
         </div>
     );

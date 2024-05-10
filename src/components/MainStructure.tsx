@@ -42,11 +42,11 @@ function MainStructure() {
     }
 
     const tags = {
-        "BD": "red-500",
-        "C": "green-500",
-        "CD": "yellow-500",
-        "IHC": "blue-500",
-        "PDS": "orange-500"
+        "BD": "#ef4444", // red
+        "C": "#ca8a04", // yellow
+        "CD": "#047857", // green
+        "IHC": "#2563eb", // blue
+        "PDS": "#f97316" // orange
     }
     
     return ( 

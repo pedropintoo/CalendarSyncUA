@@ -12,8 +12,8 @@ function Tasks() {
                 </div>
                 <div>
                     {/* Aqui você pode mapear os eventos filtrados e renderizar a informação desejada */}
-                    {SC.filteredEventsICS.map((event, index) => (
-                        <Event handleEvent={()=>{console.log("Event")}} event={event} />
+                    {SC.filteredEventsICS.map((event) => (
+                        <Event key={event.id} handleEvent={()=>{console.log("Event")}} event={event} />
                     ))}
                 </div>
             </div>

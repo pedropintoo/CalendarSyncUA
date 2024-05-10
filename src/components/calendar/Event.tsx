@@ -7,8 +7,8 @@ function Event({handleEvent, event}: {handleEvent: () => void,  event: EventICSP
 
     return (
         <div 
-        className={`bg-${color} text-white p-2 rounded-lg m-1 cursor-pointer`}
-        onClick={handleEvent}>
+        className={`text-white p-2 rounded-lg m-1 cursor-pointer`}
+        onClick={handleEvent} style={{ backgroundColor: `${color}`}}>
             <h1>{event.title}</h1>
         </div>
     );

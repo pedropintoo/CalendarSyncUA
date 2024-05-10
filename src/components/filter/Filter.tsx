@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useStructureContext } from '../contexts/StructureContext';
 
 function Filter() {
@@ -6,19 +6,18 @@ function Filter() {
   const SC = useStructureContext();
 
   const [selectAll, setSelectAll] = useState(false);
-  const [selectedTags, setSelectedTags] = useState({});
+  const [selectedTags, setSelectedTags] = useState({} as {[key: string]: boolean});
 
   const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const newSelectedTags = {};
+    setSelectAll(!selectAll); // flip the selectAll state
+    const newSelectedTags = {} as {[key: string]: boolean};
     Object.keys(SC.tags).forEach(tagName => {
-      newSelectedTags[tagName] = !selectAll;
+      newSelectedTags[tagName] = !selectAll; // apply the flipped selectAll state to all tags
     });
     setSelectedTags(newSelectedTags);
-    filterEvents(newSelectedTags);
   };
 
-  const handleTagCheckboxChange = (tagName) => {
+  const handleTagCheckboxChange = (tagName: string) => {
     const newSelectedTags = {
       ...selectedTags,
       [tagName]: !selectedTags[tagName]
@@ -26,19 +25,15 @@ function Filter() {
     setSelectedTags(newSelectedTags);
     const allSelected = Object.values(newSelectedTags).every(value => value);
     setSelectAll(allSelected);
-    filterEvents(newSelectedTags);
   };
 
-  const filterEvents = (selectedTags) => {
-    const filteredEvents = SC.allEventsICS.filter(event => {
-        return selectedTags[event.tagName];
-    });
 
-    console.log('Filtered Events:', filteredEvents); // Adicionando o console.log
-
+  // Effect to update filtered events when selected tags change
+  useEffect(() => {
+    const filteredEvents = SC.allEventsICS.filter(event => selectedTags[event.tagName]);
     SC.setFilteredEventsICS(filteredEvents);
-};
-
+    console.log('Filtered Events:', filteredEvents);
+  }, [selectedTags, SC.allEventsICS]); // Dependency array includes selectedTags and SC
 
   return (
     // <!-- Main  -->
@@ -60,7 +55,7 @@ function Filter() {
               checked={selectedTags[tagName] || false}
               onChange={() => handleTagCheckboxChange(tagName)}
             />
-            <label htmlFor={tagName} className={`text-bg text-${SC.tags[tagName]} ml-2`}>
+            <label htmlFor={tagName} className={`text-bg ml-2`} style={{ color: `${SC.tags[tagName]}`}}>
               {tagName}
             </label>
           </div>

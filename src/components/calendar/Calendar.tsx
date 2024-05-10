@@ -160,9 +160,11 @@ const Day = ({ date }: { date: Date }) => {
     });
 
     // Sorted by hour
-    events.sort((a, b) => a.startDate == b.startDate ? 0 : a.startDate < b.startDate ? -1 : 1);
+    //events.sort((a, b) => a.startDate == b.startDate ? 0 : a.startDate < b.startDate ? -1 : 1);
 
     const isMonth = date.getMonth() == CC.currentMonthIndex;
+
+    console.log("Events: ", events);
 
     return (
         <>
@@ -172,7 +174,7 @@ const Day = ({ date }: { date: Date }) => {
             >
                 <p className={`${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-5 h-5' : ''}`}>{currentDayOfMonth}</p>
                 <div>
-                    {events.map((event) => (<CalendarEvent event={event}/>))}
+                    {events.map((event) => (<CalendarEvent key={event.id} event={event}/>))}
                 </div>
             </div>
         </>
