@@ -13,3 +13,9 @@ Para correr:
 ```
 npm run dev
 ```
+
+Para inicar server:
+```
+node src/server/server.mjs inicia na porta 3000
+```
+
