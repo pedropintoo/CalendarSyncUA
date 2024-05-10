@@ -159,22 +159,22 @@ const Day = ({ date }: { date: Date }) => {
         return start <= date && date <= end;
     });
 
-    // Sorted by hour
-    //events.sort((a, b) => a.startDate == b.startDate ? 0 : a.startDate < b.startDate ? -1 : 1);
+    // Sort by hour
+    events.sort((a, b) => a.startDate == b.startDate ? 0 : a.startDate < b.startDate ? -1 : 1);
 
     const isMonth = date.getMonth() == CC.currentMonthIndex;
 
-    console.log("Events: ", events);
-
     return (
         <>
-            <div
-                className={`relative px-3 py-2 cursor-pointer h-36 ${isToday ? 'border-2 border-black-100' : ''}  ${isMonth? 'bg-white': 'bg-gray-100'}`}
-                onClick={handleDayClick}
-            >
-                <p className={`${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-5 h-5' : ''}`}>{currentDayOfMonth}</p>
+            <div className={`relative px-3 py-2 cursor-pointer h-36 overflow-y-auto ${isToday ? 'border-2 border-black-100' : ''}  ${isMonth? 'bg-white': 'bg-gray-100'}`}
+                onClick={handleDayClick}><p className={`${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-6 h-6' : ''}`}>{currentDayOfMonth}</p>
                 <div>
-                    {events.map((event) => (<CalendarEvent key={event.id} event={event}/>))}
+                    {events.map((event) => (
+                    <CalendarEvent 
+                        key={event.id} 
+                        event={event} 
+                        isStartDate={event.startDate.getDate() == date.getDate()}/>
+                        ))}
                 </div>
             </div>
         </>
@@ -185,6 +185,7 @@ const Day = ({ date }: { date: Date }) => {
 function CalendarGrid() {
     const CC = useCalendarContext();
 
+    let inserted = 0;
     const calendarGrid: JSX.Element[] = [];
 
     const daysInMonth = new Date(CC.currentYear, CC.currentMonthIndex+1, 0).getDate(); // go to last day..
@@ -199,21 +200,21 @@ function CalendarGrid() {
     // Generate cells for days before the first day of the month
     for (let offset = firstDayOfMonth - 2; offset >= 0; offset--) {
         const currentDate = new Date(prevMonth.getFullYear(), prevMonth.getMonth(), daysInPrevMonth - offset);
-        calendarGrid.push(<Day date={currentDate} />);
+        calendarGrid.push(<Day key={inserted++} date={currentDate} />);
     }
 
     // Generate cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
         const currentDate = new Date(CC.currentYear, CC.currentMonthIndex, day);
-        calendarGrid.push(<Day date={currentDate} />);
+        calendarGrid.push(<Day key={inserted++} date={currentDate} />);
     }
 
     const nextMonth = new Date(currentMonth.setMonth(currentMonth.getMonth()+2)); // increase one month
 
     // Generate cells for days after the last day of the month
-    for (let i = 1; calendarGrid.length % 7 != 0; i++) {
+    for (let i = 1; inserted % 7 != 0; i++) {
         const currentDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), i);
-        calendarGrid.push(<Day date={currentDate} />);
+        calendarGrid.push(<Day key={inserted++} date={currentDate} />);
     }
 
     return (

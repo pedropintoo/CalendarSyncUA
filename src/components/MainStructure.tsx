@@ -1,5 +1,5 @@
 import Calendar from "./calendar/Calendar";
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Filter from "./filter/Filter";
 import Tasks from "./tasks/Tasks";
 import { StructureContext } from "./contexts/StructureContext";
@@ -35,10 +35,12 @@ function MainStructure() {
         LOCATION:Office
         END:VEVENT
         END:VCALENDAR`;
-        handleAddEvent({id: "1", title: "Meeting", startDate: new Date("2024-05-06T10:00:00Z"), endDate: new Date("2024-05-06T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "BD"});
+        handleAddEvent({id: "1", title: "Anniversary", startDate: new Date("2024-05-06T17:00:00Z"), endDate: new Date("2024-05-06T18:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "BD"});
         handleAddEvent({id: "2", title: "Meeting", startDate: new Date("2024-05-08T10:00:00Z"), endDate: new Date("2024-05-08T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "IHC"});
-        handleAddEvent({id: "3", title: "Meeting", startDate: new Date("2024-05-10T10:00:00Z"), endDate: new Date("2024-05-10T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "CD"});
-
+        handleAddEvent({id: "3", title: "Start Project", startDate: new Date("2024-04-10T12:00:00Z"), endDate: new Date("2024-04-10T18:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "CD"});
+        handleAddEvent({id: "4", title: "Holidays", startDate: new Date("2024-05-13T10:00:00Z"), endDate: new Date("2024-05-15T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "PDS"});
+        handleAddEvent({id: "5", title: "Special Dinner", startDate: new Date("2024-05-13T14:00:00Z"), endDate: new Date("2024-05-13T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "C"});
+        handleAddEvent({id: "6", title: "Special Dinner", startDate: new Date("2024-05-06T14:00:00Z"), endDate: new Date("2024-05-06T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "C"});
     }
 
     const tags = {

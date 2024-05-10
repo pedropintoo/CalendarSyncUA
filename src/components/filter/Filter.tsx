@@ -11,7 +11,7 @@ function Filter() {
   const handleSelectAll = () => {
     setSelectAll(!selectAll); // flip the selectAll state
     const newSelectedTags = {} as {[key: string]: boolean};
-    Object.keys(SC.tags).forEach(tagName => {
+    Object.keys(SC.tags).map(tagName => {
       newSelectedTags[tagName] = !selectAll; // apply the flipped selectAll state to all tags
     });
     setSelectedTags(newSelectedTags);
@@ -27,13 +27,14 @@ function Filter() {
     setSelectAll(allSelected);
   };
 
-
-  // Effect to update filtered events when selected tags change
+  // Update the filtered events when dependencies change
   useEffect(() => {
     const filteredEvents = SC.allEventsICS.filter(event => selectedTags[event.tagName]);
+    filteredEvents.sort((a, b) => a.startDate == b.startDate ? 0 : a.startDate < b.startDate ? -1 : 1);
+    
     SC.setFilteredEventsICS(filteredEvents);
     console.log('Filtered Events:', filteredEvents);
-  }, [selectedTags, SC.allEventsICS]); // Dependency array includes selectedTags and SC
+  }, [selectedTags, SC.allEventsICS]); // Dependency in selectedTags and SC.allEventsICS
 
   return (
     // <!-- Main  -->
@@ -47,7 +48,7 @@ function Filter() {
           <label htmlFor="selectAll" className="text-bg text-black-500 ml-2">Select All</label>
         </div>
         {Object.entries(SC.tags).map(([tagName]) => (
-          <div className="flex items-center mb-2">
+          <div key={tagName} className="flex items-center mb-2">
             <input
               type="checkbox"
               id={tagName}
