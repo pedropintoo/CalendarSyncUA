@@ -51,7 +51,7 @@ function Filter() {
           <input type="checkbox" id="selectAll" className="mr-2 ml-3" checked={selectAll} onChange={handleSelectAll} />
           <label htmlFor="selectAll" className="text-bg text-black-500 ml-2">Select All</label>
         </div>
-        {Object.entries(SC.tags).map(([tagName, colorClass]) => (
+        {Object.entries(SC.tags).map(([tagName]) => (
           <div className="flex items-center mb-2">
             <input
               type="checkbox"
@@ -60,7 +60,7 @@ function Filter() {
               checked={selectedTags[tagName] || false}
               onChange={() => handleTagCheckboxChange(tagName)}
             />
-            <label htmlFor={tagName} className={`text-bg ${colorClass[0]} ml-2`}>
+            <label htmlFor={tagName} className={`text-bg text-${SC.tags[tagName]} ml-2`}>
               {tagName}
             </label>
           </div>

@@ -1,4 +1,4 @@
-import {useState, createContext} from 'react';
+import {createContext} from 'react';
 import React from 'react';
 
 export interface EventICSProps {
@@ -10,7 +10,6 @@ export interface EventICSProps {
     location?: string;
     rawData: string; // raw ics data
     tagName: string;
-    tagColor: string;
 }
 
 export interface StructureContextType {
@@ -18,15 +17,15 @@ export interface StructureContextType {
     setAllEventsICS: (events: EventICSProps[]) => void;
     filteredEventsICS: EventICSProps[];
     setFilteredEventsICS: (events: EventICSProps[]) => void;
-    tags: { [key: string]: string[] };
+    tags: { [key: string]: string };
 }
 
 // Initialize the context with default values, including the tags object
 export const StructureContext = createContext<StructureContextType>({
     allEventsICS: [],
-    setAllEventsICS: (events: EventICSProps[]) => {},
+    setAllEventsICS: (_: EventICSProps[]) => {},
     filteredEventsICS: [],
-    setFilteredEventsICS: (events: EventICSProps[]) => {},
+    setFilteredEventsICS: (_: EventICSProps[]) => {},
     tags: {}
 });
 

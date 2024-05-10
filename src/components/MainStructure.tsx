@@ -3,19 +3,7 @@ import React, { useState } from 'react';
 import Filter from "./filter/Filter";
 import Tasks from "./tasks/Tasks";
 import { StructureContext } from "./contexts/StructureContext";
-
-interface EventICSProps {
-    id: string;
-    title: string;
-    startDate: Date;
-    endDate: Date;
-    description?: string;
-    location?: string;
-    rawData: string; // raw ics data
-    tagName: string;
-    tagColor: string;
-}
-
+import { EventICSProps } from "./contexts/StructureContext";
 
 function MainStructure() {
 
@@ -47,18 +35,18 @@ function MainStructure() {
         LOCATION:Office
         END:VEVENT
         END:VCALENDAR`;
-        handleAddEvent({id: "1", title: "Meeting", startDate: new Date("2024-05-06T10:00:00Z"), endDate: new Date("2024-05-06T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "BD", tagColor: tags.BD[1]});
-        handleAddEvent({id: "2", title: "Meeting", startDate: new Date("2024-05-08T10:00:00Z"), endDate: new Date("2024-05-08T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "IHC", tagColor: tags.IHC[1]});
-        handleAddEvent({id: "3", title: "Meeting", startDate: new Date("2024-05-10T10:00:00Z"), endDate: new Date("2024-05-10T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "CD", tagColor: tags.CD[1]});
+        handleAddEvent({id: "1", title: "Meeting", startDate: new Date("2024-05-06T10:00:00Z"), endDate: new Date("2024-05-06T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "BD"});
+        handleAddEvent({id: "2", title: "Meeting", startDate: new Date("2024-05-08T10:00:00Z"), endDate: new Date("2024-05-08T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "IHC"});
+        handleAddEvent({id: "3", title: "Meeting", startDate: new Date("2024-05-10T10:00:00Z"), endDate: new Date("2024-05-10T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "CD"});
 
     }
 
     const tags = {
-        "BD": ["text-red-500", "bg-red-500"],
-        "C": ["text-green-500", "bg-green-500"],
-        "CD": ["text-yellow-500", "bg-yellow-500"],
-        "IHC": ["text-blue-500", "bg-blue-500"],
-        "PDS": ["text-orange-500", "bg-orange-500"]
+        "BD": "red-500",
+        "C": "green-500",
+        "CD": "yellow-500",
+        "IHC": "blue-500",
+        "PDS": "orange-500"
     }
     
     return ( 
