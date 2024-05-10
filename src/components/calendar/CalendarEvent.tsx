@@ -11,7 +11,8 @@ function CalendarEvent({event, isStartDate}: {event: EventICSProps, isStartDate:
             <div className={`${isStartDate ? 'absolute w-2 rounded-tl-none rounded-bl-none h-full left-0 top-0' : ''}`} style={{backgroundColor: color}}></div>
             {/* Event content with padding only on the right and top/bottom to leave space for the color bar */}
             <div className="p-0 pl-3 overflow-x-auto whitespace-nowrap">
-                <span>{event.startDate.getHours().toString()}h - <span style={{color: `${color}`}}>{event.title}</span></span>
+                <span>{isStartDate ? `${event.startDate.getHours()}:${event.startDate.toLocaleTimeString('en', {minute: '2-digit'})}` : ''} 
+                <span style={{color: `${color}`}}> {event.title}</span></span>
             </div>
         </div>
     );

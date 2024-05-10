@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import CalendarEvent from './CalendarEvent';
 import Modal from './Import'
-import { useStructureContext } from '../contexts/StructureContext';
 import { CalendarContext, useCalendarContext } from '../contexts/CalendarContext';
+import Day from './Day';
 
 interface ButtonProps {
     label: string;
@@ -134,49 +133,6 @@ function CalendarHeader() {
             </div>
         </div>
         
-        </>
-    );
-}
-
-const Day = ({ date }: { date: Date }) => {
-    
-    const SC = useStructureContext();
-    const CC = useCalendarContext();
-
-    const handleDayClick = () => {
-        console.log('Day clicked:', date.toDateString());
-        console.log(isMonth)
-    }
-
-    const currentDayOfMonth = date.getDate();
-    const isToday = date.toDateString() === new Date().toDateString();
-
-    // Filter events that has: startEvent <= currentDate <= endEvent
-    const events = SC.filteredEventsICS.filter(event => {
-        const start = new Date(event.startDate.getFullYear(), event.startDate.getMonth(), event.startDate.getDate());
-        const end = new Date(event.endDate.getFullYear(), event.endDate.getMonth(), event.endDate.getDate());
-
-        return start <= date && date <= end;
-    });
-
-    // Sort by hour
-    events.sort((a, b) => a.startDate == b.startDate ? 0 : a.startDate < b.startDate ? -1 : 1);
-
-    const isMonth = date.getMonth() == CC.currentMonthIndex;
-
-    return (
-        <>
-            <div className={`relative px-3 py-2 cursor-pointer h-36 overflow-y-auto ${isToday ? 'border-2 border-black-100' : ''}  ${isMonth? 'bg-white': 'bg-gray-100'}`}
-                onClick={handleDayClick}><p className={`${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-6 h-6' : ''}`}>{currentDayOfMonth}</p>
-                <div>
-                    {events.map((event) => (
-                    <CalendarEvent 
-                        key={event.id} 
-                        event={event} 
-                        isStartDate={event.startDate.getDate() == date.getDate()}/>
-                        ))}
-                </div>
-            </div>
         </>
     );
 }
