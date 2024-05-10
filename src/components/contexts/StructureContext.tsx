@@ -8,7 +8,7 @@ export interface EventICSProps {
     endDate: Date;
     description?: string;
     location?: string;
-    rawData: string; // raw ics data
+    rawData?: string; // raw ics data
     tagName: string;
 }
 

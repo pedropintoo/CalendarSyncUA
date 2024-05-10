@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import Modal from './Import'
+import CalendarEvent from './CalendarEvent';
+import { useStructureContext } from '../contexts/StructureContext';
+import ImportModal from './Import'
+import AddEventModal from './AddEventModal';
 import { CalendarContext, useCalendarContext } from '../contexts/CalendarContext';
 import Day from './Day';
 
@@ -41,9 +44,11 @@ const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
 
 const HeaderButtons: React.FC = () => {
     const [isImportOpen, setImportOpen] = useState(false);
-    const handleAddEvent = () => {
 
+    const CC = useCalendarContext()
+    const handleAddEvent = () => {
         console.log('Add Event');
+        CC.setAddEventOpen(true);
     };
 
     const handleExport = () => {
@@ -61,10 +66,12 @@ const HeaderButtons: React.FC = () => {
             <div className="flex border-solid border-b-2 border-sky-600 justify-between items-center px-4 py-2">
                 <div>
                     <Button label="Add Event +" onClick={handleAddEvent} />
+                    {CC.isAddEventOpen &&
+                        <AddEventModal/>}
                 </div>
                 <div>
                     <Button label="Import" onClick={openImport} />
-                    <Modal isOpen={isImportOpen}>
+                    <ImportModal isOpen={isImportOpen}>
                         <button type="button" className="ml-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-2.5 py-1 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onClick={closeImport}>X</button>
                         <div className="flex items-center justify-center w-full">
                             <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer dark:hover:border-gray-500 dark:hover:bg-gray-100">
@@ -78,7 +85,7 @@ const HeaderButtons: React.FC = () => {
                                 <input id="dropzone-file" type="file" className="hidden" />
                             </label>
                         </div>
-                    </Modal>
+                    </ImportModal>
                     <Button label="Export" onClick={handleExport} />
                 </div>
             </div>
@@ -203,14 +210,14 @@ function WeekDays() {
 function Calendar() {
     // Calendar Context
     const CC = useCalendarContext();
-
     const [currentMonthIndex, setMonthIndex] = useState(CC.currentMonthIndex);
     const [currentYear, setYear] = useState(CC.currentYear);
+    const [isAddEventOpen, setAddEventOpen] = useState(CC.isAddEventOpen)
     
     return (
         <>
-        <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600">
-            <CalendarContext.Provider value={{currentMonthIndex, currentYear, setMonthIndex, setYear}}>
+        <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600 rounded">
+            <CalendarContext.Provider value={{currentMonthIndex, currentYear, setMonthIndex, setYear, isAddEventOpen,setAddEventOpen}}>
                 <HeaderButtons />
                 <CalendarHeader/>
                 <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
