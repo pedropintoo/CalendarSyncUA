@@ -6,7 +6,8 @@ function Filter() {
   const SC = useStructureContext();
 
   const [selectAll, setSelectAll] = useState(true);
-  const [selectedTags, setSelectedTags] = useState({} as {[key: string]: boolean});
+  const [selectedTags, setSelectedTags] = useState(SC.tags);
+
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll); // flip the selectAll state
@@ -35,6 +36,8 @@ function Filter() {
     SC.setFilteredEventsICS(filteredEvents);
     console.log('Filtered Events:', filteredEvents);
   }, [selectedTags, SC.allEventsICS]); // Dependency in selectedTags and SC.allEventsICS
+
+  
 
   return (
     // <!-- Main  -->
