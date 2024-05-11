@@ -7,7 +7,7 @@ function TaskEvent({handleEvent, event}: {handleEvent: () => void,  event: Event
     var options = {day: 'numeric', month: 'long', year: 'numeric'}
 
     return (
-        <div className="relative mx-2 my-3 py-1 rounded cursor-pointer" style={{ border: `2px solid ${color}` }}>
+        <div className="relative mx-2 my-4 px-1 py-1 rounded cursor-pointer">
             {/* Left color bar */}
             <div className="absolute w-2 rounded-tl-none rounded-bl-none h-full left-0 top-0" style={{backgroundColor: color}}></div>
             {/* Event content with padding only on the right and top/bottom to leave space for the color bar */}
