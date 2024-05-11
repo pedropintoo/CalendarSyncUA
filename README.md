@@ -14,7 +14,7 @@ Para correr:
 npm run dev
 ```
 
-Para inicar server:
+Para inicar server: (separadamente! nao é necessário pois ele já é iniciado pelo vite)
 ```
 node src/server/server.mjs inicia na porta 3000
 ```

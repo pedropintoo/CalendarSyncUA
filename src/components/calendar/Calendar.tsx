@@ -81,9 +81,12 @@ const HeaderButtons: React.FC = () => {
                 // Parse response JSON
                
                 const responseData = await response.json();
-                console.log('File uploaded:', responseData);
+                //console.log('File uploaded:', responseData);
 
-
+                responseData.forEach((event: any) => {
+                    //console.log(event)
+                    CC.addEvent(event)
+                }
 
             } catch (error) {
                 console.error('Error uploading file:', error.message);
