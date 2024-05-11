@@ -205,7 +205,7 @@ function Calendar() {
 
     return (
         <>
-            <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600 rounded">
+            <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600">
                 <CalendarContext.Provider value={{ currentMonthIndex, currentYear, setMonthIndex, setYear, isAddEventOpen, setAddEventOpen, isImportOpen, setImportOpen, isExportOpen, setExportOpen }}>
                     <HeaderButtons />
                     <CalendarHeader />
