@@ -71,7 +71,6 @@ export default MainStructure;
 
 export const colors = [
     "#F87171", "#F87171", "#F87171", // red
-    "#FBBF24", "#FBBF24", "#FBBF24", // yellow
     "#34D399", "#34D399", "#34D399", // green
     "#3B82F6", "#3B82F6", "#3B82F6", // blue
     "#F97316", "#F97316", "#F97316", // orange
