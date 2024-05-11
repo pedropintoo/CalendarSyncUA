@@ -4,29 +4,56 @@ import { useCalendarContext } from "../contexts/CalendarContext";
 const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0];
   if (file) {
-      try {
-          // Create a FormData object to send the file
+    try {
+      // Create a FormData object to send the file
 
 
-          // Make a POST request to the backend server
-          const response = await fetch('http://localhost:3000/upload', {
-              method: 'POST',
-              body: file,
-          });
+      // Make a POST request to the backend server
+      const response = await fetch('http://localhost:3000/upload', {
+        method: 'POST',
+        body: file,
+      });
 
-          if (!response.ok) {
-              throw new Error('Failed to upload file');
-          }
-
-          // Parse response JSON
-         
-          const responseData = await response.json();
-          //console.log('File uploaded:', responseData);
-
-
-      } catch (error) {
-          console.error('Error uploading file:', error.message);
+      if (!response.ok) {
+          throw new Error('Failed to upload file');
       }
+
+      // Parse response JSON
+      
+      const responseData = await response.json();
+
+      responseData.forEach((data: any) => {
+        // Create a new event with the data from the response
+        const startDate = new Date(data.startDate);
+        const endDate = new Date(event.endDate);
+        const fetchLastEventId = () => {
+          const lastEvent = SC.allEventsICS[SC.allEventsICS.length - 1];
+          if (lastEvent) {
+            return parseInt(lastEvent.id) + 1;
+          } else {
+            return 1;
+          }
+        };
+
+        const eventId = fetchLastEventId();
+        const newEvent = {
+          id: eventId.toString(),
+          title: event.title,
+          description: event.description,
+          startDate,
+          endDate,
+          tagName: event.tagName,
+          tagColor: SC.tags[event.tagName][1],
+        };
+
+        // Add the new event to the list of events
+        SC.setAllEventsICS([...SC.allEventsICS, newEvent]);
+      }
+
+
+    } catch (error) {
+      console.error('Error uploading file:', error.message);
+    }
   }
 };
 

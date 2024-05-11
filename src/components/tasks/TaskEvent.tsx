@@ -5,6 +5,7 @@ function TaskEvent({handleEvent, event}: {handleEvent: () => void,  event: Event
     
     const color = SC.tags[event.tagName];
     var options = {day: 'numeric', month: 'long', year: 'numeric'}
+    const isOneDay = event.startDate.getDate() === event.endDate.getDate() && event.startDate.getMonth() === event.endDate.getMonth() && event.startDate.getFullYear() === event.endDate.getFullYear();
 
     return (
         <div className="relative mx-2 my-4 px-1 py-1 rounded cursor-pointer">
@@ -16,7 +17,13 @@ function TaskEvent({handleEvent, event}: {handleEvent: () => void,  event: Event
             </div>
             <div className="p-0 pl-3 overflow-x-auto whitespace-nowrap">
                 
-                <span>{event.startDate.toLocaleDateString("eng", options)} - {event.endDate.toLocaleDateString("eng", options)}</span>
+                <span>{event.startDate.toLocaleDateString("eng", options)} 
+                    <span className={`${isOneDay ? 'hidden' : ''}`}>
+                        - {event.endDate.toLocaleDateString("eng", options)}
+                    </span>
+                    
+
+                </span>
             </div>
         </div>
     );

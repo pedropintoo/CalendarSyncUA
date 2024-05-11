@@ -11,6 +11,8 @@ function MainStructure() {
     const [filteredEventsICS, setFilteredEventsICS] = useState<EventICSProps[]>([]);
 
     const handleAddEvent = (newEvent: EventICSProps) => {
+        newEvent.startDate.setTime(newEvent.startDate.getTime() + newEvent.startDate.getTimezoneOffset() * 60 * 1000);
+        newEvent.endDate.setTime(newEvent.endDate.getTime() + newEvent.endDate.getTimezoneOffset() * 60 * 1000);
         setAllEventsICS(prevEvents => {
             const updatedEvents = [...prevEvents, newEvent];
             console.log(updatedEvents); 
