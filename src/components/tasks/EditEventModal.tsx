@@ -21,7 +21,9 @@ const EditEventModal = ({ closeModal, thisEvent }) => {
     event.preventDefault();
     // Create a new event with the form data
     const startDate = new Date(`${form.startDate}T${form.startHour}:00.000Z`);
+    startDate.setTime(startDate.getTime() + startDate.getTimezoneOffset() * 60 * 1000);
     const endDate = new Date(`${form.endDate}T${form.endHour}:00.000Z`);
+    endDate.setTime(endDate.getTime() + endDate.getTimezoneOffset() * 60 * 1000);
   
     const newEvent = {
         id: thisEvent.id.toString(),
