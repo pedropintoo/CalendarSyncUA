@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStructureContext } from '../contexts/StructureContext';
 import { useCalendarContext } from '../contexts/CalendarContext';
+import { Button } from './Button';
 
 interface AddEventForm {
   title: string;
