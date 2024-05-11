@@ -18,6 +18,7 @@ export interface StructureContextType {
     filteredEventsICS: EventICSProps[];
     setFilteredEventsICS: (events: EventICSProps[]) => void;
     tags: { [key: string]: string };
+    setTags: (tags: { [key: string]: string }) => void;
 }
 
 // Initialize the context with default values, including the tags object
@@ -26,7 +27,8 @@ export const StructureContext = createContext<StructureContextType>({
     setAllEventsICS: (_: EventICSProps[]) => {},
     filteredEventsICS: [],
     setFilteredEventsICS: (_: EventICSProps[]) => {},
-    tags: {}
+    tags: {},
+    setTags: (_: { [key: string]: string }) => {}
 });
 
 export const useStructureContext = () => {

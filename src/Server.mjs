@@ -15,7 +15,7 @@ app.post('/upload', (req, res) => {
     const data = ical.parseICS(icsData, function (err, data) {
         if (err) console.log(err);
         const jsonData = JSON.stringify(data);
-        console.log(jsonData);
+        //console.log(jsonData);
         res.send(jsonData);
     });
 
@@ -25,5 +25,5 @@ app.post('/upload', (req, res) => {
 
 const port = 3000;
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server (backend) is running on http://localhost:${port}`);
 });

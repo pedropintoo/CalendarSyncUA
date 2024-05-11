@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import CalendarEvent from './CalendarEvent';
-import { useStructureContext } from '../contexts/StructureContext';
-import ImportModal from './Import'
+import ImportModal from './ImportModal'
 import AddEventModal from './AddEventModal';
 import { CalendarContext, useCalendarContext } from '../contexts/CalendarContext';
 import Day from './Day';
-
-interface ButtonProps {
-    label: string;
-    onClick?: () => void;
-}
+import Button from './Button';
 
 const Months = [
     "January", "February", "March", "April", "May", "June",
@@ -17,79 +11,24 @@ const Months = [
 ];
 
 
-
-const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
-    const [isHovered, setIsHovered] = React.useState(false);
-
-    const handleMouseEnter = () => {
-        setIsHovered(true);
-    };
-
-    const handleMouseLeave = () => {
-        setIsHovered(false);
-    };
-
-    return (
-        <button
-            className={`text-white font-bold py-2 px-4 m-1 rounded ${isHovered ? 'bg-sky-500' : 'bg-sky-600'
-                }`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={onClick}
-        >
-            {label}
-        </button>
-    );
-};
-
 const HeaderButtons: React.FC = () => {
-    const [isImportOpen, setImportOpen] = useState(false);
 
     const CC = useCalendarContext()
+
     const handleAddEvent = () => {
         console.log('Add Event');
         CC.setAddEventOpen(true);
     };
 
+    const handleImport = () => {
+        console.log('Import');
+        CC.setImportOpen(true);
+    };
+
     const handleExport = () => {
         console.log('Export');
-    };
-    const openImport = () => {
-        setImportOpen(true);
-    };
-    const closeImport = () => {
-        setImportOpen(false);
-    };
-
-    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            try {
-                // Create a FormData object to send the file
-
-
-                // Make a POST request to the backend server
-                const response = await fetch('http://localhost:3000/upload', {
-                    method: 'POST',
-                    body: file,
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to upload file');
-                }
-
-                // Parse response JSON
-               
-                const responseData = await response.json();
-                console.log('File uploaded:', responseData);
-
-
-
-            } catch (error) {
-                console.error('Error uploading file:', error.message);
-            }
-        }
-    };
+        CC.setExportOpen(true);
+    }
 
     return (
         <>
@@ -100,23 +39,12 @@ const HeaderButtons: React.FC = () => {
                         <AddEventModal />}
                 </div>
                 <div>
-                    <Button label="Import" onClick={openImport} />
-                    <ImportModal isOpen={isImportOpen}>
-                        <button type="button" className="ml-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-2.5 py-1 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onClick={closeImport}>X</button>
-                        <div className="flex items-center justify-center w-full">
-                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:border-gray-500 hover:bg-gray-100">
-                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <svg className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                    </svg>
-                                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                    <p className="text-xs text-gray-500">ICS file only</p>
-                                </div>
-                                <input id="dropzone-file" type="file" accept=".ics" className="hidden" onChange={handleFileUpload} />
-                            </label>
-                        </div>
-                    </ImportModal>
+                    <Button label="Import" onClick={handleImport} />
+                    {CC.isImportOpen &&
+                        <ImportModal />}
                     <Button label="Export" onClick={handleExport} />
+                    {CC.isExportOpen &&
+                        <ImportModal />}
                 </div>
             </div>
         </>
@@ -125,7 +53,11 @@ const HeaderButtons: React.FC = () => {
 
 // DONE
 function CalendarHeader() {
-    const CC = useCalendarContext()
+    const CC = useCalendarContext();
+
+    const handleMonthChange = (monthIndex: React.SetStateAction<number>) => {
+        CC.setMonthIndex(monthIndex);
+    };
 
     const handleNextMonth = () => {
         if (CC.currentMonthIndex === 11) {
@@ -149,16 +81,26 @@ function CalendarHeader() {
     return (
         <>
             <div className='flex justify-center items-center'>
-                <div className='w-80 items-center justify-center py-1'>
-                    <div className='text-center rounded-md bg-white shadow-sm grid grid-cols-4 gap-1 border-2 border-solid'>
+                <div className='w-90 items-center justify-center py-1'>
+                    <div className='text-center rounded-md bg-white shadow-sm grid grid-cols-3 gap-1 border-2 border-solid'>
                         <button onClick={handlePrevMonth} type="button" className="flex align-center justify-center py-2">
                             <span className="sr-only">Previous month</span>
                             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
                             </svg>
                         </button>
-                        <button type="button" className="font-semibold ">{Months[CC.currentMonthIndex]}</button>
-                        <button type="button" className="">{CC.currentYear}</button>
+                        <div className=' items-center grid grid-cols-2 gap-1'>
+                            <select value={Months[CC.currentMonthIndex]} onChange={(e) => handleMonthChange(Months.indexOf(e.target.value))} className="cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
+                                {Months.map((month, index) => (
+                                    <option key={index} value={month}>{month}</option>
+                                ))}
+                            </select>
+                            <select value={CC.currentYear} onChange={(e) => CC.setYear(parseInt(e.target.value))} className="cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
+                                {Array.from({ length: 10 }, (_, i) => CC.currentYear - 5 + i).map((year, index) => (
+                                    <option key={index} value={year}>{year}</option>
+                                ))}
+                            </select>
+                        </div>
                         <button onClick={handleNextMonth} type="button" className="flex align-center justify-center py-2">
                             <span className="sr-only">Next month</span>
                             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -175,6 +117,7 @@ function CalendarHeader() {
 }
 
 // Before reading take a look in Data Class from typescript documentation...
+// DONE
 function CalendarGrid() {
     const CC = useCalendarContext();
 
@@ -218,7 +161,6 @@ function CalendarGrid() {
 
 }
 
-
 // DONE
 function WeekDays() {
     // Array holding the full names of the week days, used to display full names for larger screens
@@ -243,11 +185,13 @@ function Calendar() {
     const [currentMonthIndex, setMonthIndex] = useState(CC.currentMonthIndex);
     const [currentYear, setYear] = useState(CC.currentYear);
     const [isAddEventOpen, setAddEventOpen] = useState(CC.isAddEventOpen)
+    const [isImportOpen, setImportOpen] = useState(CC.isImportOpen)
+    const [isExportOpen, setExportOpen] = useState(CC.isExportOpen)
 
     return (
         <>
-            <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600 rounded">
-                <CalendarContext.Provider value={{ currentMonthIndex, currentYear, setMonthIndex, setYear, isAddEventOpen, setAddEventOpen }}>
+            <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600">
+                <CalendarContext.Provider value={{ currentMonthIndex, currentYear, setMonthIndex, setYear, isAddEventOpen, setAddEventOpen, isImportOpen, setImportOpen, isExportOpen, setExportOpen }}>
                     <HeaderButtons />
                     <CalendarHeader />
                     <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">

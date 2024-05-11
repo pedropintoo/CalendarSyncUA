@@ -38,7 +38,9 @@ function AddEventModal(){
       event.preventDefault();
       // Create a new event with the form data
       const startDate = new Date(`${form.startDate}T${form.startHour}:00.000Z`);
+      startDate.setTime(startDate.getTime() + startDate.getTimezoneOffset() * 60 * 1000);
       const endDate = new Date(`${form.endDate}T${form.endHour}:00.000Z`);
+      endDate.setTime(endDate.getTime() + endDate.getTimezoneOffset() * 60 * 1000);
       const fetchLastEventId = () => {
         const lastEvent = SC.allEventsICS[SC.allEventsICS.length - 1];
         if (lastEvent) {
@@ -56,7 +58,6 @@ function AddEventModal(){
         startDate,
         endDate,
         tagName: form.tag,
-        tagColor: SC.tags[form.tag][1],
       };
       SC.setAllEventsICS(prevEvents => {
         const updatedEvents = [...prevEvents, newEvent];
@@ -69,7 +70,7 @@ function AddEventModal(){
     return (
         <>
             <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-              <div className='relative p-4 w-full max-w-md max-h-full bg-white p-8 rounded-lg shadow-lg'>
+              <div className='relative p-8 w-full max-w-2xl max-h-full bg-white rounded-lg shadow-lg'>
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                   <h3 className="text-lg">
                       Add Event
@@ -134,6 +135,6 @@ function AddEventModal(){
             </div>
       </>
     );
-};
+}
 
 export default AddEventModal;

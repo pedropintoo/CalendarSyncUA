@@ -5,8 +5,9 @@ function Filter() {
   // Structure Context
   const SC = useStructureContext();
 
-  const [selectAll, setSelectAll] = useState(false);
-  const [selectedTags, setSelectedTags] = useState({} as {[key: string]: boolean});
+  const [selectAll, setSelectAll] = useState(true);
+  const [selectedTags, setSelectedTags] = useState(SC.tags);
+
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll); // flip the selectAll state
@@ -36,6 +37,8 @@ function Filter() {
     console.log('Filtered Events:', filteredEvents);
   }, [selectedTags, SC.allEventsICS]); // Dependency in selectedTags and SC.allEventsICS
 
+  
+
   return (
     // <!-- Main  -->
     <>
@@ -53,7 +56,7 @@ function Filter() {
               type="checkbox"
               id={tagName}
               className="mr-2 ml-3"
-              checked={selectedTags[tagName] || false}
+              checked={selectedTags[tagName] || selectAll}
               onChange={() => handleTagCheckboxChange(tagName)}
             />
             <label htmlFor={tagName} className={`text-bg ml-2`} style={{ color: `${SC.tags[tagName]}`}}>

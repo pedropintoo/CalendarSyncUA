@@ -9,8 +9,17 @@ function MainStructure() {
 
     const [allEventsICS, setAllEventsICS] = useState<EventICSProps[]>([]);
     const [filteredEventsICS, setFilteredEventsICS] = useState<EventICSProps[]>([]);
+    const [tags, setTags] = useState<{ [key: string]: string }>({
+        "BD": "#ef4444", // red
+        "C": "#ca8a04", // yellow
+        "CD": "#047857", // green
+        "IHC": "#2563eb", // blue
+        "PDS": "#f97316" // orange
+    });
 
     const handleAddEvent = (newEvent: EventICSProps) => {
+        newEvent.startDate.setTime(newEvent.startDate.getTime() + newEvent.startDate.getTimezoneOffset() * 60 * 1000);
+        newEvent.endDate.setTime(newEvent.endDate.getTime() + newEvent.endDate.getTimezoneOffset() * 60 * 1000);
         setAllEventsICS(prevEvents => {
             const updatedEvents = [...prevEvents, newEvent];
             console.log(updatedEvents); 
@@ -42,14 +51,6 @@ function MainStructure() {
         handleAddEvent({id: "5", title: "Special Dinner", startDate: new Date("2024-05-13T14:00:00Z"), endDate: new Date("2024-05-13T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "C"});
         handleAddEvent({id: "6", title: "Special Dinner", startDate: new Date("2024-05-06T14:00:00Z"), endDate: new Date("2024-05-06T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "C"});
     }
-
-    const tags = {
-        "BD": "#ef4444", // red
-        "C": "#ca8a04", // yellow
-        "CD": "#047857", // green
-        "IHC": "#2563eb", // blue
-        "PDS": "#f97316" // orange
-    }
     
     return ( 
         // <!-- Main  -->
@@ -67,3 +68,14 @@ function MainStructure() {
 }
 
 export default MainStructure;
+
+export const colors = [
+    "#F87171", "#F87171", "#F87171", // red
+    "#FBBF24", "#FBBF24", "#FBBF24", // yellow
+    "#34D399", "#34D399", "#34D399", // green
+    "#3B82F6", "#3B82F6", "#3B82F6", // blue
+    "#F97316", "#F97316", "#F97316", // orange
+    "#818CF8", "#818CF8", "#818CF8", // indigo
+    "#A855F7", "#A855F7", "#A855F7", // purple
+]
+    
