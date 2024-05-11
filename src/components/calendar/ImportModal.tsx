@@ -1,7 +1,23 @@
 import { useCalendarContext } from "../contexts/CalendarContext";
+import { EventICSProps, StructureContextType, useStructureContext } from "../contexts/StructureContext";
+import { colors } from "../MainStructure";
 
 
-const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+const handleFileUpload = (SC: StructureContextType) => async (event: React.ChangeEvent<HTMLInputElement>) => {
+  
+  const fetchLastEventId = (eventsToImport : EventICSProps[]) => {
+    if (eventsToImport.length > 0) {
+      const lastEvent = eventsToImport[eventsToImport.length - 1];
+      return parseInt(lastEvent.id) + 1;
+    }
+    const lastEvent = SC.allEventsICS[SC.allEventsICS.length - 1];
+    if (lastEvent) {
+      return parseInt(lastEvent.id) + 1;
+    } else {
+      return 1;
+    }
+  };
+
   const file = event.target.files?.[0];
   if (file) {
     try {
@@ -21,34 +37,44 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
       // Parse response JSON
       
       const responseData = await response.json();
-
-      responseData.forEach((data: any) => {
+      console.log("Response data: ", responseData);
+      
+      const eventsToImport = [] as EventICSProps[];
+      Object.keys(responseData).forEach(entry => {
+        if (responseData[entry]["type"] !== "VEVENT") {
+          console.log("Not an event: ", responseData[entry]);
+          return;
+        }
+        const data = responseData[entry];
         // Create a new event with the data from the response
-        const startDate = new Date(data.startDate);
-        const endDate = new Date(event.endDate);
-        const fetchLastEventId = () => {
-          const lastEvent = SC.allEventsICS[SC.allEventsICS.length - 1];
-          if (lastEvent) {
-            return parseInt(lastEvent.id) + 1;
-          } else {
-            return 1;
-          }
-        };
+        const startDate = new Date(data['start']);
+        startDate.setTime(startDate.getTime() + startDate.getTimezoneOffset() * 60 * 1000);
+        const endDate = new Date(data['end']);
+        endDate.setTime(endDate.getTime() + endDate.getTimezoneOffset() * 60 * 1000);
 
-        const eventId = fetchLastEventId();
+        const eventId = fetchLastEventId(eventsToImport);
+
+        const tagName = data['categories'][0];
+        console.log("Tag name: ", tagName);
+        if (SC.tags[tagName] === undefined) {
+          SC.tags[tagName] = colors[Math.floor(Math.random() * colors.length)];
+        }
+
         const newEvent = {
           id: eventId.toString(),
-          title: event.title,
-          description: event.description,
+          title: data['summary'],
+          description: data['description'],
           startDate,
           endDate,
-          tagName: event.tagName,
-          tagColor: SC.tags[event.tagName][1],
+          tagName: tagName
         };
 
         // Add the new event to the list of events
-        SC.setAllEventsICS([...SC.allEventsICS, newEvent]);
-      }
+        eventsToImport.push(newEvent);
+        console.log("Import event: ", newEvent);
+      });
+
+      SC.setAllEventsICS([...SC.allEventsICS, ...eventsToImport])
 
 
     } catch (error) {
@@ -60,6 +86,7 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
 
 function ImportModal(){
   const CC = useCalendarContext();
+  const SC = useStructureContext();
 
   const handleClose = () =>{
     CC.setImportOpen(false);
@@ -80,7 +107,7 @@ function ImportModal(){
                     <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                     <p className="text-xs text-gray-500">ICS file only</p>
                   </div>
-                  <input id="dropzone-file" type="file" accept=".ics" className="hidden" onChange={handleFileUpload} />
+                  <input id="dropzone-file" type="file" accept=".ics" className="hidden" onChange={handleFileUpload(SC)} />
                 </label>
               </div>
             </div>
