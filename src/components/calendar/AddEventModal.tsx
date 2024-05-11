@@ -136,6 +136,6 @@ function AddEventModal(){
             </div>
       </>
     );
-};
+}
 
 export default AddEventModal;
