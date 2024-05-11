@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useStructureContext } from '../contexts/StructureContext';
 import { useCalendarContext } from '../contexts/CalendarContext';
-import { Button } from './Button';
 
 interface AddEventForm {
   title: string;
@@ -72,7 +71,7 @@ function AddEventModal(){
     return (
         <>
             <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-              <div className='relative p-4 w-full max-w-md max-h-full bg-white p-8 rounded-lg shadow-lg'>
+              <div className='relative p-8 w-full max-w-2xl max-h-full bg-white rounded-lg shadow-lg'>
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                   <h3 className="text-lg">
                       Add Event
