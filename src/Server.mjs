@@ -21,7 +21,7 @@ app.post('/upload', (req, res) => {
         if (jsonData === '{}') {
             jsonData = JSON.stringify(ical.parseICS(unescape(req.body.toString())))
         }
-        console.log('Parsed ICS Data:', jsonData);
+        //console.log('Parsed ICS Data:', jsonData);
         res.send(jsonData);
         
         return;
@@ -34,7 +34,7 @@ app.post('/upload', (req, res) => {
     const data = ical.parseICS(icsData);
     const jsonData = JSON.stringify(data);
 
-    console.log('Parsed ICS Data:', jsonData);
+    //console.log('Parsed ICS Data:', jsonData);
     res.send(jsonData);
 
 });
