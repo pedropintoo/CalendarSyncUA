@@ -58,7 +58,6 @@ function AddEventModal(){
         startDate,
         endDate,
         tagName: form.tag,
-        tagColor: SC.tags[form.tag][1],
       };
       SC.setAllEventsICS(prevEvents => {
         const updatedEvents = [...prevEvents, newEvent];
