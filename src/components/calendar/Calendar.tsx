@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ImportModal from './ImportModal'
 import AddEventModal from './AddEventModal';
+import ExportModal from './ExportModal';
 import { CalendarContext, useCalendarContext } from '../contexts/CalendarContext';
 import Day from './Day';
 import Button from './Button';
@@ -46,7 +47,7 @@ const HeaderButtons: React.FC = () => {
                         <ImportModal />}
                     <Button label="Export" onClick={handleExport} />
                     {CC.isExportOpen &&
-                        <ImportModal />}
+                        <ExportModal />}
                 </div>
             </div>
         </>
