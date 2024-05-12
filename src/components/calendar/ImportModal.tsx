@@ -1,9 +1,11 @@
+import { MouseEventHandler, useCallback, useState } from "react";
 import { useCalendarContext } from "../contexts/CalendarContext";
 import { EventICSProps, StructureContextType, useStructureContext } from "../contexts/StructureContext";
 import { colors } from "../MainStructure";
+import TaskEvent from "../tasks/TaskEvent";
 
 
-const handleFileUpload = (SC: StructureContextType) => async (event: React.ChangeEvent<HTMLInputElement>) => {
+const handleFileUpload = (SC: StructureContextType, setEventsToImport: React.Dispatch<React.SetStateAction<EventICSProps[]>>) => async (event: React.ChangeEvent<HTMLInputElement>) => {
   
   const fetchLastEventId = (eventsToImport : EventICSProps[]) => {
     if (eventsToImport.length > 0) {
@@ -73,11 +75,6 @@ const handleFileUpload = (SC: StructureContextType) => async (event: React.Chang
                 break;
               }
             }
-            // if also not found, create a new tag
-            if (SC.tags[tagName] === undefined) {
-              console.log("Creating new tag: ", {[tagName]: colors[Math.floor(Math.random() * colors.length)]});
-              SC.tags[tagName] = colors[Math.floor(Math.random() * colors.length)];
-            }
           }
 
           const newEvent = {
@@ -93,17 +90,13 @@ const handleFileUpload = (SC: StructureContextType) => async (event: React.Chang
           eventsToImport.push(newEvent);
           console.log("Import event: ", newEvent);
         });
-
-        
-
-
       } catch (error) {
         console.error('Error uploading file:', error.message);
       }
     }
   }
-
-  SC.setAllEventsICS([...SC.allEventsICS, ...eventsToImport])
+  // sort by tag
+  setEventsToImport(eventsToImport);
   
 };
 
@@ -112,29 +105,117 @@ function ImportModal(){
   const CC = useCalendarContext();
   const SC = useStructureContext();
 
+  const [eventsToImport, setEventsToImport ] = useState<EventICSProps[]>([]);
+
   const handleClose = () =>{
+    CC.setImportOpen(false);
+  }
+
+  function handleConfirm() {
+    console.log("Events to import: ", eventsToImport);
+    let newTags = {}
+    eventsToImport.forEach(event => {
+      if (SC.tags[event.tagName] === undefined) {
+        newTags = {...newTags, [event.tagName]: colors[Math.floor(Math.random() * colors.length)]};
+      }
+    });
+    SC.setTags({...SC.tags, ...newTags});
+    SC.setAllEventsICS([...SC.allEventsICS, ...eventsToImport]);
     CC.setImportOpen(false);
   }
   
   if (!CC.isImportOpen) return null;
+
+  const openElearning: MouseEventHandler<HTMLButtonElement> = (event) => {
+    // Prevent any default behavior if needed
+    event.preventDefault();
+    
+    // Open the e-learning page in a new tab
+    window.open("https://elearning.ua.pt/calendar/export.php?", '_blank');
+  };
+  
+  const openPaco: MouseEventHandler<HTMLButtonElement> = (event) => {
+    // Prevent any default behavior if needed
+    event.preventDefault();
+    
+    // Open the e-learning page in a new tab
+    window.open("https://paco2.ua.pt/exams-calendar", '_blank');
+  };
+
   return (
       <>
           <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div className='relative p-4 w-full max-w-md max-h-full bg-white p-8 rounded-lg shadow-lg'>
-              <button type="button" className="ml-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-2.5 py-1 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onClick={handleClose}>X</button>
-              <div className="flex items-center justify-center w-full">
+            <div className='relative p-8 w-full max-w-2xl max-h-full bg-white rounded-lg shadow-lg'>
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                  <h3 className="text-lg">
+                      Import ICS Files
+                  </h3>
+                  <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={handleClose}>
+                      <svg className="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14">
+                          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      </svg>
+                      <span className="sr-only">Close modal</span>
+                  </button>
+              </div>
+              <form  className='p-4 md:p-5 overflow-y-auto'>
+                <div className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mb-3" role="alert">
+                  <p className="text-sm"><b>.ics</b> files are used to store calendar information. <br />Upload it to add events to your calendar </p>
+                </div>                
                 <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:border-gray-500 hover:bg-gray-100">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                    </svg>
-                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-gray-500">ICS file only</p>
+                      <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span></p>
+                      <p className="text-xs text-gray-500">ICS file only</p>
                   </div>
-                  <input id="dropzone-file" type="file" multiple accept=".ics" className="hidden" onChange={handleFileUpload(SC)} />
+                  <input id="dropzone-file" type="file" multiple accept=".ics" className="hidden"  onChange={handleFileUpload(SC, setEventsToImport)} />
                 </label>
+                <div className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 my-3 shadow-md" role="alert">
+                  <div className="flex">
+                    <div className="py-1"><svg className="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                    <div>
+                      <p className="font-bold">Download <b>.ics</b> files</p>
+                      <p className="text-sm">Hear are some links where you can download <b>.ics</b> files.</p>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="my-4">
+                          <button type="submit" onClick={openElearning} className="text-white hover:text-gray-100 inline-flex items-center bg-teal-500 hover:bg-teal-400 focus:ring-4 focus:outline-none focus:ring-teal-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                          <img className="me-2" src="https://elearning.ua.pt/pluginfile.php/1/core_admin/favicon/64x64/1707728245/favicon.png" alt="eLearning"/>
+                              eLearning
+                          </button>
+                        </div>
+                        <div className="my-4">
+                          <button type="submit" onClick={openPaco} className="text-white hover:text-gray-100 inline-flex items-center bg-teal-500 hover:bg-teal-400 focus:ring-4 focus:outline-none focus:ring-teal-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                          <img className="me-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEWAAAD///+7aYsFAAAAKklEQVR4AWNgYGQAAvs/UAQEQBH7/wzKMxlsyxgMyxh0wchwJsP//0AEAPI1DRQU5KYeAAAAAElFTkSuQmCC" alt="eLearning"/>
+                              Paco
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className={`${eventsToImport.length == 0? '' : 'h-40'} `} >
+                  <div className="grid grid-cols-2">
+                  <p className={`${eventsToImport.length == 0? 'invisible' : ''} text-xl font-bold py-3`}>Confirmation:</p>
+                  <div className="grid grid-cols-2">
+                    <button type="submit" className={`${eventsToImport.length == 0? 'invisible' : ''} text-white inline-flex items-center font-bold py-2 px-4 m-1 rounded bg-sky-600 hover:bg-sky-500`} onClick={handleConfirm}>
+                        Confirm
+                    </button>
+                    <button type="button" className=" text-white inline-flex items-center font-bold py-2 px-4 m-1 rounded bg-gray-500 hover:bg-gray-400" onClick={handleClose}>
+                          Close
+                          <span className="sr-only">Close modal</span>
+                    </button>
+                  </div>
+                  
+                  </div>
+                  
+                  {eventsToImport.length == 0? <></> :  
+                  eventsToImport.sort((a, b) => a.tagName == b.tagName ? 0 : a.tagName < b.tagName ? -1 : 1).map(event => (
+                  <TaskEvent key={event.id} event={event} handleEvent={function (): void {
+                      return;
+                    } } />
+                ))}
               </div>
+                </form>
             </div>
+              
           </div>
       </>
   );
