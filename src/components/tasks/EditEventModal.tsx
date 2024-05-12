@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EventICSProps, useStructureContext } from '../contexts/StructureContext';
 
-const EditEventModal = ({thisEvent}: {thisEvent: EventICSProps}) => {
+const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSProps, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, setIsView: React.Dispatch<React.SetStateAction<boolean>>} ) => {
   const SC = useStructureContext();
   const [form, setForm] = useState({
     title: thisEvent.title,
@@ -22,32 +22,26 @@ const EditEventModal = ({thisEvent}: {thisEvent: EventICSProps}) => {
   
   const closeModal = () => {
     SC.setEditEventOpen(false);
+    setIsOpen(false);
+    setIsView(false);
   };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault(); 
     // Create a new event with the form data
-    const startDate = new Date(`${form.startDate}T${form.startHour}:00.000Z`);
-    startDate.setTime(startDate.getTime() + startDate.getTimezoneOffset() * 60 * 1000);
-    const endDate = new Date(`${form.endDate}T${form.endHour}:00.000Z`);
-    endDate.setTime(endDate.getTime() + endDate.getTimezoneOffset() * 60 * 1000);
-  
-    const newEvent = {
-        id: thisEvent.id.toString(),
-        title: form.title,
-        description: form.description,
-        startDate,
-        endDate,
-        tagName: form.tag,
-        tagColor: SC.tags[form.tag][1],
-    };
-    SC.setAllEventsICS(prevEvents => {
-        const updatedEvents = [...prevEvents, newEvent];
-        delete(updatedEvents[updatedEvents.indexOf(thisEvent)])
-        console.log(updatedEvents); 
-        return updatedEvents;
-        });
+    const newStartDate = new Date(`${form.startDate}T${form.startHour}:00.000Z`);
+    newStartDate.setTime(newStartDate.getTime() + newStartDate.getTimezoneOffset() * 60 * 1000);
+    const newEndDate = new Date(`${form.endDate}T${form.endHour}:00.000Z`);
+    newEndDate.setTime(newEndDate.getTime() + newEndDate.getTimezoneOffset() * 60 * 1000);
+    thisEvent.title = form.title;
+    thisEvent.description = form.description;
+    thisEvent.startDate = newStartDate;
+    thisEvent.endDate = newEndDate;
+    thisEvent.tagName = form.tag;
     SC.setEditEventOpen(false);
+    SC.setViewEventOpen(false);
+    setIsOpen(false);
+    setIsView(false);
   };
 
   return (

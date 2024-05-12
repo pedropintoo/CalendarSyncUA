@@ -1,7 +1,8 @@
 import { EventICSProps, useStructureContext } from "../contexts/StructureContext";
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
+import Button from "../calendar/Button";
 
-const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates}: {thisEvent: EventICSProps, setIsOpen : React.Dispatch<React.SetStateAction<boolean>>}) => {
+const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates, openEdit}: {thisEvent: EventICSProps, setIsOpen : React.Dispatch<React.SetStateAction<boolean>>, openEdit: React.Dispatch<React.SetStateAction<boolean>>}) => {
     const SC = useStructureContext();
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -10,10 +11,17 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates}: {thisEvent: Ev
         setIsOpen(false);
     }
 
+    const handleEditEvent = () =>{
+        SC.setEditEventOpen(true); 
+        SC.setViewEventOpen(false);  
+        openEdit(true); 
+    }
+
     useEffect(() => {
         // Add event listener when modal is opened
         const handleClickOutside = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                event.stopPropagation();
                 SC.setViewEventOpen(false);
                 setIsOpen(false);
             }
@@ -28,7 +36,7 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates}: {thisEvent: Ev
     }, [modalRef, SC, setIsOpen]);
 
     return (
-        <div className="fixed" style={{ top: clickCoordinates.y/2, left: clickCoordinates.x - 250}}>
+        <div className="fixed z-50" style={{ top: clickCoordinates.y/2, left: clickCoordinates.x - 250}}>
             <div ref={modalRef} className="relative p-8 w-full max-w-2xl max-h-full bg-white p-8 rounded-lg shadow-lg">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                       <h3 className="text-lg">
@@ -43,11 +51,17 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates}: {thisEvent: Ev
                 </div>
                 <div className="p-4 md:p-5">
                     <p className="text-sm text-gray-500">
-                        {thisEvent.startDate.toISOString().split('T')[0]} - {thisEvent.endDate.toISOString().split('T')[0]}
+                        {thisEvent.startDate.toISOString().split('T')[0]} | {thisEvent.endDate.toISOString().split('T')[0]}
                     </p>
                     <p className="text-sm text-gray-500">
                         {thisEvent.startDate.toISOString().split('T')[1].split(':00.000Z')[0]} - {thisEvent.endDate.toISOString().split('T')[1].split(':00.000Z')[0]}
                     </p>
+                </div>
+                <div className="flex justify-center mt-4 ">
+                    <Button label="Edit" onClick={handleEditEvent}/>
+                    <button className="text-white inline-flex items-center font-bold py-2 px-4 m-1 rounded bg-red-600 hover:bg-red-500">
+                        Delete
+                    </button>
                 </div>
             </div>
         </div>
