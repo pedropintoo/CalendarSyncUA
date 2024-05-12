@@ -50,7 +50,7 @@ function MainStructure() {
         handleAddEvent({id: "3", title: "Start Project", startDate: new Date("2024-04-10T12:00:00Z"), endDate: new Date("2024-04-10T18:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "3-CD"});
         handleAddEvent({id: "4", title: "Holidays", startDate: new Date("2024-05-13T10:00:00Z"), endDate: new Date("2024-05-15T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "4-PDS"});
         handleAddEvent({id: "5", title: "Special Dinner", startDate: new Date("2024-05-13T14:00:00Z"), endDate: new Date("2024-05-13T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "5-C"});
-        handleAddEvent({id: "6", title: "Special Dinner", startDate: new Date("2024-05-06T14:00:00Z"), endDate: new Date("2024-05-06T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "6-C"});
+        handleAddEvent({id: "6", title: "Special Dinner", startDate: new Date("2024-05-06T14:00:00Z"), endDate: new Date("2024-05-06T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "5-C"});
     }
     
     return ( 
