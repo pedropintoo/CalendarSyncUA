@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EventICSProps, useStructureContext } from '../contexts/StructureContext';
 
-const EditEventModal = ({thisEvent}: {thisEvent: EventICSProps}) => {
+const EditEventModal = ({thisEvent, setIsOpen}: {thisEvent: EventICSProps, setIsOpen : React.Dispatch<React.SetStateAction<boolean>>}) => {
   const SC = useStructureContext();
   const [form, setForm] = useState({
     title: thisEvent.title,
@@ -12,6 +12,8 @@ const EditEventModal = ({thisEvent}: {thisEvent: EventICSProps}) => {
     endHour: thisEvent.endDate.toISOString().split('T')[1].split(':00.000Z')[0],
     tag: thisEvent.tagName,
   });
+
+  console.log("Event to edit: ", thisEvent)
   
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm({...form, [event.target.name]: event.target.value });
@@ -20,6 +22,7 @@ const EditEventModal = ({thisEvent}: {thisEvent: EventICSProps}) => {
   
   const closeModal = () => {
     SC.setEditEventOpen(false);
+    setIsOpen(false);
   };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -46,6 +49,7 @@ const EditEventModal = ({thisEvent}: {thisEvent: EventICSProps}) => {
         return updatedEvents;
         });
     SC.setEditEventOpen(false);
+    setIsOpen(false);
   };
 
   return (

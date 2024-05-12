@@ -1,4 +1,5 @@
 import { colors } from "../MainStructure";
+import { useState } from "react";
 import { EventICSProps, useStructureContext } from "../contexts/StructureContext";
 import EditEventModal from './EditEventModal'
 
@@ -10,10 +11,14 @@ function TaskEvent({event}: {event: EventICSProps}){
     const options = {day: 'numeric', month: 'long', year: 'numeric'}
     const isOneDay = event.startDate.getDate() === event.endDate.getDate() && event.startDate.getMonth() === event.endDate.getMonth() && event.startDate.getFullYear() === event.endDate.getFullYear();
 
-    const handleEditEvent = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    function handleEditEvent () {
+        setIsOpen(true);
         console.log('Edit Event');
-        console.log(SC.isEditEventOpen)
+        console.log(SC.isEditEventOpen);
         SC.setEditEventOpen(true);
+        console.log("AAA - - " + event.startDate);
         console.log(event.startDate.toISOString().split('T')[1].split('.000Z')[0]);
     }
 
@@ -34,7 +39,7 @@ function TaskEvent({event}: {event: EventICSProps}){
 
                 </span>
             </div>
-            {SC.isEditEventOpen && <EditEventModal thisEvent={event}/>}
+            {SC.isEditEventOpen && isOpen && <EditEventModal thisEvent={event} setIsOpen={setIsOpen}/>}
         </div>
     );
 }
