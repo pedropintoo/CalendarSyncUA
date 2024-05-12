@@ -106,6 +106,7 @@ function ImportModal(){
   const SC = useStructureContext();
 
   const [eventsToImport, setEventsToImport ] = useState<EventICSProps[]>([]);
+  const [unselectedEvents, setUnselectedEvents] = useState<EventICSProps[]>([]);
 
   const handleClose = () =>{
     CC.setImportOpen(false);
@@ -114,13 +115,18 @@ function ImportModal(){
   function handleConfirm() {
     console.log("Events to import: ", eventsToImport);
     let newTags = {}
+    let newEvents = [] as EventICSProps[];
     eventsToImport.forEach(event => {
-      if (SC.tags[event.tagName] === undefined) {
-        newTags = {...newTags, [event.tagName]: colors[Math.floor(Math.random() * colors.length)]};
+      if (!unselectedEvents.includes(event)) {
+        newEvents.push(event);
+        if (SC.tags[event.tagName] === undefined) {
+          newTags = {...newTags, [event.tagName]: colors[Math.floor(Math.random() * colors.length)]};
+        }
       }
     });
+
     SC.setTags({...SC.tags, ...newTags});
-    SC.setAllEventsICS([...SC.allEventsICS, ...eventsToImport]);
+    SC.setAllEventsICS([...SC.allEventsICS, ...newEvents]);
     CC.setImportOpen(false);
   }
   
@@ -141,6 +147,15 @@ function ImportModal(){
     // Open the e-learning page in a new tab
     window.open("https://paco2.ua.pt/exams-calendar", '_blank');
   };
+
+  function handleCheckboxChange(event: EventICSProps): void {
+    // remove from unselected events if it is there
+    if (unselectedEvents.includes(event)) {
+      setUnselectedEvents(unselectedEvents.filter(e => e !== event));
+      return;
+    }
+    setUnselectedEvents([...unselectedEvents, event]);
+  }
 
   return (
       <>
@@ -191,7 +206,7 @@ function ImportModal(){
                     </div>
                   </div>
                 </div>
-                <div className={`${eventsToImport.length == 0? '' : 'h-40'} `} >
+                <div className={`${eventsToImport.length == 0? '' : 'h-52'} `} >
                   <div className="grid grid-cols-2">
                   <p className={`${eventsToImport.length == 0? 'invisible' : ''} text-xl font-bold py-3`}>Confirmation:</p>
                   <div className="grid grid-cols-2">
@@ -205,13 +220,21 @@ function ImportModal(){
                   </div>
                   
                   </div>
+                  <ul className="w-full">
+
                   
                   {eventsToImport.length == 0? <></> :  
                   eventsToImport.sort((a, b) => a.tagName == b.tagName ? 0 : a.tagName < b.tagName ? -1 : 1).map(event => (
-                  <TaskEvent key={event.id} event={event} handleEvent={function (): void {
-                      return;
-                    } } />
-                ))}
+                    <li>
+                      <input defaultChecked type="checkbox" id="react-option" value="" className="hidden peer"
+                        onChange={() => handleCheckboxChange(event)}></input>
+                      <label htmlFor="react-option" className="my-1 mt-3 p-0 inline-flex items-center justify-between w-full rounded-lg cursor-pointer border-2 border-gray-200 peer-checked:border-blue-600 hover:bg-gray-200">                           
+                        <TaskEvent key={event.id} event={event} handleEvent={function (): void { return; } } />
+                      </label>
+                    </li>
+                  ))}
+                  </ul>
+                
               </div>
                 </form>
             </div>
