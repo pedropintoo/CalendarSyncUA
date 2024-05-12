@@ -35,8 +35,6 @@ function TaskEvent({event}: {event: EventICSProps}){
                     <span className={`${isOneDay ? 'hidden' : ''}`}>
                         - {event.endDate.toLocaleDateString("eng", options)}
                     </span>
-                    
-
                 </span>
             </div>
             {SC.isEditEventOpen && isOpen && <EditEventModal thisEvent={event} setIsOpen={setIsOpen}/>}
