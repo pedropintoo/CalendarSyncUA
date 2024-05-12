@@ -6,6 +6,11 @@ function Tasks() {
     const SC = useStructureContext();
     const CC = useCalendarContext();
     console.log(CC.currentMonthIndex)
+
+    const displayedEvents = SC.filteredEventsICS.filter(event => {
+        return event.startDate >= new Date();
+    });
+
     return (
         <>
             <div className="border-solid bg-slate-200 border-2 border-sky-600 rounded">
@@ -14,7 +19,7 @@ function Tasks() {
                 </div>
                 <div className='relative h-dvh overflow-y-auto'>
                     {/* Aqui você pode mapear os eventos filtrados e renderizar a informação desejada */}
-                    {SC.filteredEventsICS.map((event) => (
+                    {displayedEvents.map((event) => (
                         <TaskEvent key={event.id} handleEvent={()=>{console.log("Event")}} event={event} />
                     ))}
                 </div>

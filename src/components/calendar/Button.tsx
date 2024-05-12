@@ -2,10 +2,11 @@ import React from 'react';
 
 interface ButtonProps {
     label: string;
+    element?: JSX.Element;
     onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ label, element, onClick }) => {
     const [isHovered, setIsHovered] = React.useState(false);
 
     const handleMouseEnter = () => {
@@ -18,13 +19,13 @@ const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
 
     return (
         <button
-            className={`text-white font-bold py-2 px-4 m-1 rounded ${isHovered ? 'bg-sky-500' : 'bg-sky-600'
+            className={`text-white inline-flex items-center font-bold py-2 px-4 m-1 rounded ${isHovered ? 'bg-sky-500' : 'bg-sky-600'
                 }`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={onClick}
-        >
-            {label}
+        >   
+            {element? element : label}
         </button>
     );
 };
