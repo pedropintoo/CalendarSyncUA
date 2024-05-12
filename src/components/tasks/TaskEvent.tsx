@@ -38,7 +38,7 @@ function TaskEvent({event}: {event: EventICSProps}){
                 </span>
             </div>
             {SC.isEditEventOpen && isOpen && <EditEventModal thisEvent={event} setIsOpen={setIsOpen}/>}
-        </div>
+2        </div>
     );
 }
 
