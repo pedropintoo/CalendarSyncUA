@@ -2,11 +2,11 @@ import Calendar from "./calendar/Calendar";
 import { useState } from 'react';
 import Filter from "./filter/Filter";
 import Tasks from "./tasks/Tasks";
-import { StructureContext } from "./contexts/StructureContext";
+import { StructureContext, useStructureContext } from "./contexts/StructureContext";
 import { EventICSProps } from "./contexts/StructureContext";
 
 function MainStructure() {
-
+    const SC = useStructureContext();
     const [allEventsICS, setAllEventsICS] = useState<EventICSProps[]>([]);
     const [filteredEventsICS, setFilteredEventsICS] = useState<EventICSProps[]>([]);
     const [tags, setTags] = useState<{ [key: string]: string }>({});
@@ -56,7 +56,7 @@ function MainStructure() {
         // <!-- Main  -->
         <>
         <div className="px-4 py-4 mx-auto grid lg:grid-cols-6 gap-2 min-h-screen">
-            <StructureContext.Provider value={{allEventsICS, setAllEventsICS, filteredEventsICS, setFilteredEventsICS, tags, setTags}}>
+            <StructureContext.Provider value={{allEventsICS, setAllEventsICS, filteredEventsICS, setFilteredEventsICS, tags, setTags, isEditEventOpen, setEditEventOpen}}>
                 <Filter/>
                 <Calendar/>
                 <Tasks/>

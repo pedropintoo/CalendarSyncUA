@@ -19,6 +19,8 @@ export interface StructureContextType {
     setFilteredEventsICS: (events: EventICSProps[]) => void;
     tags: { [key: string]: string };
     setTags: (tags: { [key: string]: string }) => void;
+    isEditEventOpen: boolean;
+    setEditEventOpen: (state: React.SetStateAction<boolean>) => void;
 }
 
 // Initialize the context with default values, including the tags object
@@ -28,7 +30,9 @@ export const StructureContext = createContext<StructureContextType>({
     filteredEventsICS: [],
     setFilteredEventsICS: (_: EventICSProps[]) => {},
     tags: {},
-    setTags: (_: { [key: string]: string }) => {}
+    setTags: (_: { [key: string]: string }) => {},
+    isEditEventOpen: false,
+    setEditEventOpen: () => {},
 });
 
 export const useStructureContext = () => {
