@@ -1,15 +1,20 @@
 import { useStructureContext } from '../contexts/StructureContext';
 import { useCalendarContext } from '../contexts/CalendarContext';
 import CalendarEvent from './CalendarEvent';
+import { useState } from 'react';
+import AddEventModal from './AddEventModal';
 
 function Day ({ date } : { date: Date }) {
     
     const SC = useStructureContext();
     const CC = useCalendarContext();
+    const [isAddEventOpenLocal, setAddEventOpenLocal] = useState(false);
 
     const handleDayClick = () => {
         console.log('Day clicked:', date.toDateString());
-        console.log(isMonth)
+        console.log(isMonth);
+        CC.setAddEventOpen(true);
+        setAddEventOpenLocal(true);
     }
 
     const currentDayOfMonth = date.getDate();
@@ -41,6 +46,7 @@ function Day ({ date } : { date: Date }) {
                         ))}
                 </div>
             </div>
+            {isAddEventOpenLocal && CC.isAddEventOpen &&<AddEventModal setAddEventOpen={setAddEventOpenLocal} day={date}/>}
         </>
     );
 }

@@ -13,11 +13,13 @@ const Months = [
 
 const HeaderButtons: React.FC = () => {
 
-    const CC = useCalendarContext()
+    const CC = useCalendarContext();
+    const [isAddEventOpenLocal, setAddEventOpenLocal] = useState(false);
 
     const handleAddEvent = () => {
         console.log('Add Event');
         CC.setAddEventOpen(true);
+        setAddEventOpenLocal(true);
     };
 
     const handleImport = () => {
@@ -35,8 +37,8 @@ const HeaderButtons: React.FC = () => {
             <div className="flex border-solid border-b-2 border-sky-600 justify-between items-center px-4 py-2">
                 <div>
                     <Button label="Add Event +" onClick={handleAddEvent} />
-                    {CC.isAddEventOpen &&
-                        <AddEventModal />}
+                    {CC.isAddEventOpen && isAddEventOpenLocal &&
+                        <AddEventModal setAddEventOpen={setAddEventOpenLocal} day={null}/>}
                 </div>
                 <div>
                     <Button label="Import" onClick={handleImport} />
