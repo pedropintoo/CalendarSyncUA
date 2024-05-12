@@ -11,6 +11,7 @@ function MainStructure() {
     const [filteredEventsICS, setFilteredEventsICS] = useState<EventICSProps[]>([]);
     const [tags, setTags] = useState<{ [key: string]: string }>({});
     const [isEditEventOpen, setEditEventOpen] = useState(SC.isEditEventOpen);
+    const [isViewEventOpen, setViewEventOpen] = useState(SC.isViewEventOpen);
 
     const handleAddEvent = (newEvent: EventICSProps) => {
         newEvent.startDate.setTime(newEvent.startDate.getTime() + newEvent.startDate.getTimezoneOffset() * 60 * 1000);
@@ -57,7 +58,7 @@ function MainStructure() {
         // <!-- Main  -->
         <>
         <div className="px-4 py-4 mx-auto grid lg:grid-cols-6 gap-2 min-h-screen">
-            <StructureContext.Provider value={{allEventsICS, setAllEventsICS, filteredEventsICS, setFilteredEventsICS, tags, setTags, isEditEventOpen, setEditEventOpen}}>
+            <StructureContext.Provider value={{allEventsICS, setAllEventsICS, filteredEventsICS, setFilteredEventsICS, tags, setTags, isEditEventOpen, setEditEventOpen, isViewEventOpen, setViewEventOpen}}>
                 <Filter/>
                 <Calendar/>
                 <Tasks/>

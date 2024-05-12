@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EventICSProps, useStructureContext } from '../contexts/StructureContext';
 
-const EditEventModal = ({thisEvent, setIsOpen}: {thisEvent: EventICSProps, setIsOpen : React.Dispatch<React.SetStateAction<boolean>>}) => {
+const EditEventModal = ({thisEvent}: {thisEvent: EventICSProps}) => {
   const SC = useStructureContext();
   const [form, setForm] = useState({
     title: thisEvent.title,
@@ -22,7 +22,6 @@ const EditEventModal = ({thisEvent, setIsOpen}: {thisEvent: EventICSProps, setIs
   
   const closeModal = () => {
     SC.setEditEventOpen(false);
-    setIsOpen(false);
   };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -49,7 +48,6 @@ const EditEventModal = ({thisEvent, setIsOpen}: {thisEvent: EventICSProps, setIs
         return updatedEvents;
         });
     SC.setEditEventOpen(false);
-    setIsOpen(false);
   };
 
   return (

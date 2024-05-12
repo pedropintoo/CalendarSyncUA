@@ -20,7 +20,9 @@ export interface StructureContextType {
     tags: { [key: string]: string };
     setTags: (tags: { [key: string]: string }) => void;
     isEditEventOpen: boolean;
+    isViewEventOpen: boolean;
     setEditEventOpen: (state: React.SetStateAction<boolean>) => void;
+    setViewEventOpen: (state: React.SetStateAction<boolean>) => void;
 }
 
 // Initialize the context with default values, including the tags object
@@ -32,7 +34,9 @@ export const StructureContext = createContext<StructureContextType>({
     tags: {},
     setTags: (_: { [key: string]: string }) => {},
     isEditEventOpen: false,
+    isViewEventOpen: false,
     setEditEventOpen: () => {},
+    setViewEventOpen: () => {},
 });
 
 export const useStructureContext = () => {
