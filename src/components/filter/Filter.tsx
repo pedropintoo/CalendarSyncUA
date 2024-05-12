@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useStructureContext } from '../contexts/StructureContext';
+import { titleCase } from '../MainStructure';
 
 function Filter() {
   // Structure Context
@@ -64,7 +65,7 @@ function Filter() {
               onChange={() => handleTagCheckboxChange(tagName)}
             />
             <label htmlFor={tagName} className={`text-bg ml-2`} style={{ color: `${SC.tags[tagName]}`}}>
-              {tagName}
+              {titleCase(tagName.split('-')[1])}
             </label>
           </div>
         ))}
