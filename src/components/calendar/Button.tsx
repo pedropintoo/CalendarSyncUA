@@ -23,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({ label, element, onClick }) => {
                 }`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            onClick={onClick}
+            onClick={(onClick)}
         >   
             {element? element : label}
         </button>
