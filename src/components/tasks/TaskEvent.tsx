@@ -5,7 +5,7 @@ import EditEventModal from './EditEventModal'
 import ViewEventModal from "./ViewEventModal";
 
 
-function TaskEvent({event}: {event: EventICSProps}){
+function TaskEvent({event , isActive}: {event: EventICSProps, isActive: boolean}){
     const SC = useStructureContext();
     
     const color = SC.tags[event.tagName] ? SC.tags[event.tagName] : colors[Math.floor(Math.random() * colors.length)];
@@ -36,7 +36,7 @@ function TaskEvent({event}: {event: EventICSProps}){
                     </span>
                 </span>
             </div>
-            {SC.isViewEventOpen && isOpen && <ViewEventModal thisEvent={event} setIsOpen={setIsOpen} clickCoordinates={clickCoordinates}/>}
+            {isActive && SC.isViewEventOpen && isOpen && <ViewEventModal thisEvent={event} setIsOpen={setIsOpen} clickCoordinates={clickCoordinates}/>}
             {SC.isEditEventOpen && <EditEventModal thisEvent={event}/>}
         </div>
     );

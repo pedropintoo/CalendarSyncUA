@@ -20,7 +20,7 @@ function Tasks() {
                 <div className='relative h-dvh overflow-y-auto'>
                     {/* Aqui você pode mapear os eventos filtrados e renderizar a informação desejada */}
                     {displayedEvents.map((event) => (
-                        <TaskEvent key={event.id}event={event} />
+                        <TaskEvent isActive={true} key={event.id}event={event} />
                     ))}
                 </div>
             </div>
