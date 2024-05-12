@@ -43,10 +43,10 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates, openEdit, setCo
 
     return (
         <>
-            <div className="fixed z-50" style={{ top: clickCoordinates.y/2, left: clickCoordinates.x - 250}}>
-                <div ref={modalRef} className="relative p-8 w-full max-w-2xl max-h-full bg-white p-8 rounded-lg shadow-lg">
+            <div className="fixed z-50" style={{ top: clickCoordinates.y, left: clickCoordinates.x}}>
+                <div ref={modalRef} className="relative p-8 w-full max-w-sm max-h-full bg-white p-8 rounded-lg shadow-lg">
                     <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                          <h3 className="text-lg">
+                          <h3 className="text-lg overflow-x-auto">
                             {thisEvent.title}
                           </h3>
                           <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={(e) => {e.stopPropagation(); closeModal();}}>

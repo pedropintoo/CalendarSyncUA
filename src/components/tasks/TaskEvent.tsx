@@ -1,5 +1,5 @@
 import { colors, titleCase } from "../MainStructure";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { EventICSProps, useStructureContext } from "../contexts/StructureContext";
 import EditEventModal from './EditEventModal'
 import ViewEventModal from "./ViewEventModal";
@@ -16,11 +16,20 @@ function TaskEvent({event , isActive}: {event: EventICSProps, isActive: boolean}
     const [isEditOpenLocal, setIsEditOpenLocal] = useState(false);
     const [clickCoordinates, setClickCoordinates] = useState({ x: 0, y: 0 }); // State to store click coordinates
     const [isConfirmOpen, setConfirmOpen] = useState(false);
+    const taskEventRef = useRef<HTMLDivElement>(null);
 
-    function handleViewEvent (e: React.MouseEvent<HTMLDivElement>) {
+    function handleViewEvent () {
         setIsViewOpenLocal(!isViewOpenLocal);
         SC.setViewEventOpen(true);
-        setClickCoordinates({ x: e.clientX, y: e.clientY });
+        const rect = taskEventRef.current?.getBoundingClientRect();
+        if (rect) {
+            const modalLeft = rect.left - 300; // Adjust this value as needed
+            const modaltop = rect.top - 100;
+            setClickCoordinates({ x: modalLeft, y: modaltop });
+        }
+        setIsViewOpenLocal(!isViewOpenLocal);
+        console.log(clickCoordinates);
+        SC.setViewEventOpen(true);
     }
 
     const handleDeleteEvent = () => {
@@ -41,20 +50,19 @@ function TaskEvent({event , isActive}: {event: EventICSProps, isActive: boolean}
 
     return (
         <>
-        <div className="relative mx-2 my-4 px-1 py-1 rounded cursor-pointer overflow-x-auto whitespace-nowrap" onClick={handleViewEvent}>
-            {/* Left color bar */}
-            <div className="absolute w-2 rounded-tl-none rounded-bl-none h-full left-0 top-0" style={{backgroundColor: color}}></div>
-            {/* Event content with padding only on the right and top/bottom to leave space for the color bar */}
-            <div className="p-0 pl-3">
-                <span style={{color: `${color}`}}>{event.title} <br/>{titleCase(event.tagName.split('-')[1])}</span>
-            </div>
-            <div className="p-0 pl-3">                
-                <span>
-                    {event.startDate.toLocaleDateString("eng", options)} 
-                    <span className={`${isOneDay ? 'hidden' : ''}`}>
-                        - {event.endDate.toLocaleDateString("eng", options)}
+            <div className="relative mx-2 my-4 px-1 py-1 rounded cursor-pointer overflow-x-auto whitespace-nowrap" onClick={handleViewEvent}>
+                {/* Left color bar */}
+                <div className="absolute w-2 rounded-tl-none rounded-bl-none h-full left-0 top-0" ref={taskEventRef}  style={{backgroundColor: color}}></div>
+                {/* Event content with padding only on the right and top/bottom to leave space for the color bar */}
+                <div className="p-0 pl-3">
+                    <span style={{color: `${color}`}}>{event.title} <br/>{event.tagName.split('-')[1]}</span>
+                </div>
+                <div className="p-0 pl-3">                
+                    <span>{event.startDate.toLocaleDateString("eng", options)} 
+                        <span className={`${isOneDay ? 'hidden' : ''}`}>
+                            - {event.endDate.toLocaleDateString("eng", options)}
+                        </span>
                     </span>
-                </span>
                 </div>
                 {isActive && SC.isViewEventOpen && isViewOpenLocal && <ViewEventModal thisEvent={event} setIsOpen={setIsViewOpenLocal} openEdit={setIsEditOpenLocal} clickCoordinates={clickCoordinates} setConfirm={setConfirmOpen}/>}
             </div>
