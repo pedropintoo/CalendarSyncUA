@@ -41,6 +41,14 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates}: {thisEvent: Ev
                           <span className="sr-only">Close modal</span>
                       </button>
                 </div>
+                <div className="p-4 md:p-5">
+                    <p className="text-sm text-gray-500">
+                        {thisEvent.startDate.toISOString().split('T')[0]} - {thisEvent.endDate.toISOString().split('T')[0]}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                        {thisEvent.startDate.toISOString().split('T')[1].split(':00.000Z')[0]} - {thisEvent.endDate.toISOString().split('T')[1].split(':00.000Z')[0]}
+                    </p>
+                </div>
             </div>
         </div>
     )
