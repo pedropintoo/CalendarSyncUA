@@ -37,7 +37,11 @@ function Filter() {
     console.log('Filtered Events:', filteredEvents);
   }, [selectedTags, SC.allEventsICS]); // Dependency in selectedTags and SC.allEventsICS
 
-  
+  useEffect(() => {
+    if (selectAll) {
+      setSelectedTags(SC.tags);
+    }
+  }, [SC.tags]);
 
   return (
     // <!-- Main  -->
@@ -56,7 +60,7 @@ function Filter() {
               type="checkbox"
               id={tagName}
               className="mr-2 ml-3"
-              checked={selectedTags[tagName] || selectAll}
+              checked={selectedTags[tagName]}
               onChange={() => handleTagCheckboxChange(tagName)}
             />
             <label htmlFor={tagName} className={`text-bg ml-2`} style={{ color: `${SC.tags[tagName]}`}}>
