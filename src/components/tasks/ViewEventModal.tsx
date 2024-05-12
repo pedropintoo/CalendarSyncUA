@@ -1,17 +1,35 @@
 import { EventICSProps, useStructureContext } from "../contexts/StructureContext";
-import { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from 'react';
 
 const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates}: {thisEvent: EventICSProps, setIsOpen : React.Dispatch<React.SetStateAction<boolean>>}) => {
     const SC = useStructureContext();
+    const modalRef = useRef<HTMLDivElement>(null);
 
     const closeModal = () => {
         SC.setViewEventOpen(false);
         setIsOpen(false);
     }
 
+    useEffect(() => {
+        // Add event listener when modal is opened
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                SC.setViewEventOpen(false);
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Remove event listener when modal is closed
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [modalRef, SC, setIsOpen]);
+
     return (
-        <div className="fixed z-50 left-0" style={{ top: clickCoordinates.y, left: clickCoordinates.x}}>
-            <div className="relative p-8 w-full max-w-2xl max-h-full bg-white p-8 rounded-lg shadow-lg">
+        <div className="fixed" style={{ top: clickCoordinates.y/2, left: clickCoordinates.x - 250}}>
+            <div ref={modalRef} className="relative p-8 w-full max-w-2xl max-h-full bg-white p-8 rounded-lg shadow-lg">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                       <h3 className="text-lg">
                         {thisEvent.title}
