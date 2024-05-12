@@ -24,13 +24,13 @@ function TaskEvent({event , isActive}: {event: EventICSProps, isActive: boolean}
     }
 
     const handleDeleteEvent = () => {
-        console.log("delete");
-        console.log("antes" + SC.allEventsICS);
-        console.log("antes" + SC.filteredEventsICS);
-        delete(SC.allEventsICS[SC.allEventsICS.indexOf(event)]);
-        delete(SC.filteredEventsICS[SC.filteredEventsICS.indexOf(event)]);
-        console.log("depois" + SC.allEventsICS);
-        console.log("depois" + SC.filteredEventsICS);
+        const newEvents: EventICSProps[] = [];
+        SC.allEventsICS.forEach((ev) => {
+            if(ev.id !== event.id){
+                newEvents.push(ev);
+            }
+        });
+        SC.setAllEventsICS(newEvents);
         confirmClose();
     }
 
