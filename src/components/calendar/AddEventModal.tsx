@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStructureContext } from '../contexts/StructureContext';
 import { useCalendarContext } from '../contexts/CalendarContext';
 
@@ -12,7 +12,7 @@ interface AddEventForm {
   tag: string;
 }
 
-function AddEventModal(){
+function AddEventModal({setAddEventOpen, day}: {setAddEventOpen:  React.Dispatch<React.SetStateAction<boolean>>, day: Date | null}){
     const SC = useStructureContext();
     const CC = useCalendarContext();
     const [form, setForm] = useState<AddEventForm>({
@@ -25,12 +25,30 @@ function AddEventModal(){
       tag: '',
     });
 
+    const formatDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    useEffect(() => {
+      if (day) {
+      setForm(prevForm => ({
+        ...prevForm,
+        startDate: formatDate(day),
+        endDate: formatDate(day),
+      }));
+      }
+    }, [day]);
+
     const handleFormChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
       setForm({...form, [event.target.name]: event.target.value });
     };
 
     const handleClose = () =>{
       CC.setAddEventOpen(false);
+      setAddEventOpen(false);
     }
 
 
@@ -65,11 +83,12 @@ function AddEventModal(){
         return updatedEvents;
         });
         CC.setAddEventOpen(false);
+        setAddEventOpen(false);
     };
 
     return (
         <>
-            <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-20 z-50">
               <div className='relative p-8 w-full max-w-2xl max-h-full bg-white rounded-lg shadow-lg'>
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                   <h3 className="text-lg">
