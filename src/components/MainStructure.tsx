@@ -10,6 +10,7 @@ function MainStructure() {
     const [allEventsICS, setAllEventsICS] = useState<EventICSProps[]>([]);
     const [filteredEventsICS, setFilteredEventsICS] = useState<EventICSProps[]>([]);
     const [tags, setTags] = useState<{ [key: string]: string }>({});
+    const [isEditEventOpen, setEditEventOpen] = useState(SC.isEditEventOpen);
 
     const handleAddEvent = (newEvent: EventICSProps) => {
         newEvent.startDate.setTime(newEvent.startDate.getTime() + newEvent.startDate.getTimezoneOffset() * 60 * 1000);
