@@ -2,14 +2,16 @@ import Calendar from "./calendar/Calendar";
 import { useState } from 'react';
 import Filter from "./filter/Filter";
 import Tasks from "./tasks/Tasks";
-import { StructureContext } from "./contexts/StructureContext";
+import { StructureContext, useStructureContext } from "./contexts/StructureContext";
 import { EventICSProps } from "./contexts/StructureContext";
 
 function MainStructure() {
-
+    const SC = useStructureContext();
     const [allEventsICS, setAllEventsICS] = useState<EventICSProps[]>([]);
     const [filteredEventsICS, setFilteredEventsICS] = useState<EventICSProps[]>([]);
     const [tags, setTags] = useState<{ [key: string]: string }>({});
+    const [isEditEventOpen, setEditEventOpen] = useState(SC.isEditEventOpen);
+    const [isViewEventOpen, setViewEventOpen] = useState(SC.isViewEventOpen);
 
     const handleAddEvent = (newEvent: EventICSProps) => {
         newEvent.startDate.setTime(newEvent.startDate.getTime() + newEvent.startDate.getTimezoneOffset() * 60 * 1000);
@@ -49,14 +51,14 @@ function MainStructure() {
         handleAddEvent({id: "3", title: "Start Project", startDate: new Date("2024-04-10T12:00:00Z"), endDate: new Date("2024-04-10T18:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "3-CD"});
         handleAddEvent({id: "4", title: "Holidays", startDate: new Date("2024-05-13T10:00:00Z"), endDate: new Date("2024-05-15T12:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "4-PDS"});
         handleAddEvent({id: "5", title: "Special Dinner", startDate: new Date("2024-05-13T14:00:00Z"), endDate: new Date("2024-05-13T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "5-C"});
-        handleAddEvent({id: "6", title: "Special Dinner", startDate: new Date("2024-05-06T14:00:00Z"), endDate: new Date("2024-05-06T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "6-C"});
+        handleAddEvent({id: "6", title: "Special Dinner", startDate: new Date("2024-05-06T14:00:00Z"), endDate: new Date("2024-05-06T17:00:00Z"), description: "Meeting with the team", location: "Office", rawData: rawData, tagName: "5-C"});
     }
     
     return ( 
         // <!-- Main  -->
         <>
         <div className="px-4 py-4 mx-auto grid lg:grid-cols-6 gap-2 min-h-screen">
-            <StructureContext.Provider value={{allEventsICS, setAllEventsICS, filteredEventsICS, setFilteredEventsICS, tags, setTags}}>
+            <StructureContext.Provider value={{allEventsICS, setAllEventsICS, filteredEventsICS, setFilteredEventsICS, tags, setTags, isEditEventOpen, setEditEventOpen, isViewEventOpen, setViewEventOpen}}>
                 <Filter/>
                 <Calendar/>
                 <Tasks/>
