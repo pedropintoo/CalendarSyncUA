@@ -4,18 +4,23 @@ import { EventICSProps, useStructureContext } from "../contexts/StructureContext
 import TaskEvent from "../tasks/TaskEvent";
 import { titleCase } from "../MainStructure";
 
+function CancelPageRefresh(event: any) {
+    event.preventDefault(); // Prevents the default form submission behavior  
+}
+
 function ExportModal() {
     const SC = useStructureContext();
     const CC = useCalendarContext();
 
     const [unselectedEvents, setUnselectedEvents] = useState<string[]>([]);
     const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
+    const [isDone, setIsDone] = useState(false);
 
     const downloadICS = () => {
         const icsHeader = [
             'BEGIN:VCALENDAR',
             'METHOD:PUBLISH',
-            'PRODID:-//Your Organization//NONSGML Your Product Name//EN',
+            'PRODID:-//CalendarSync//UA//EN',
             'VERSION:2.0'
         ].join('\n');
 
@@ -41,6 +46,11 @@ function ExportModal() {
         
 
         const icsFooter = 'END:VCALENDAR';
+        // Prevent the page from refreshing
+        const form = document.querySelector('form');  
+        if (form !== null){
+            form.addEventListener('submit', CancelPageRefresh); 
+        }
         const icsString = [icsHeader, icsEvents, icsFooter].join('\n');
         const blob = new Blob([icsString], { type: 'text/calendar;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
@@ -51,6 +61,7 @@ function ExportModal() {
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
+        setIsDone(true)
     };
 
 
@@ -120,8 +131,8 @@ function ExportModal() {
         <>
             <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
                 <div className='relative p-8 w-full max-w-3xl max-h-full bg-white rounded-lg shadow-lg'>
-                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 className="text-lg">
+                    <div className={` ${isDone? 'hidden' : ''} flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600`}>
+                        <h3 className={`  text-lg`}>
                             Export Events to ICS
                         </h3>
                         <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={handleClose}>
@@ -131,14 +142,14 @@ function ExportModal() {
                             <span className="sr-only">Close modal</span>
                         </button>
                     </div>
-                    <form className='p-4 md:p-5 h-[50rem]'>
-                        <div className="grid grid-cols-3">
+                    <form className={`${isDone? 'hidden' : ''} ${SC.allEventsICS.length !== 0 ? 'h-[50rem]' : ''} p-4 md:p-5 overflow-y-auto `}>
+                        <div className={`${SC.allEventsICS.length !== 0 ? '' : 'hidden'} grid grid-cols-3`}>
                             <p className={` col-span-2 text-xl font-bold py-3`}>Confirmation:</p>
                             <button type="submit" className={` text-white inline-flex items-center font-bold py-2 px-4 m-1 rounded bg-sky-600 hover:bg-sky-500`} onClick={downloadICS}>
                                 Export ({countCheckedEvents()})
                             </button>
                         </div>
-                        <div className="m-1 my-3 border-2 border-gray-200">
+                        <div className={`${SC.allEventsICS.length !== 0 ? '' : 'hidden'} m-1 my-3 border-2 border-gray-200`}>
                             <ul className={`${Object.keys(SC.tags).length < 8? '' : 'h-64' } px-2 py-2 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton`}>
                                 {Object.keys(SC.tags).map((tagName) => (
                                 <li>
@@ -154,9 +165,9 @@ function ExportModal() {
                                 ))}
                             </ul>
                         </div>
-                        <p className={` col-span-2 text-xl font-bold py-3`}>Selected ({countCheckedEvents()})</p>
-                        <div className={`${SC.filteredEventsICS.length == 0 ? '' : 'h-96'} `} >
-                        <ul className="overflow-y-auto h-full">
+                        <p className={`${SC.allEventsICS.length !== 0 ? '' : 'hidden'} col-span-2 text-xl font-bold py-3`}>Selected ({countCheckedEvents()})</p>
+                        <div className={`${SC.allEventsICS.length == 0 ? '' : 'h-96'} `} >
+                        <ul className="h-full">
                             {SC.allEventsICS.length == 0? <></> :  
                             SC.allEventsICS.sort((a, b) => a.tagName == b.tagName ? 0 : a.tagName < b.tagName ? -1 : 1).map(event => (
                                 <li key={event.id}>
@@ -171,16 +182,41 @@ function ExportModal() {
                             ))}
                             </ul>
                         </div>
-                        <div className={`${SC.filteredEventsICS.length !== 0 ? 'hidden' : 'flex'} items-center justify-center`}>
-                            <p className="text-xl font-bold py-3 flex items-center">
-                                No events to export
-                                <img className="ml-2 h-6 w-6" alt="Error icon" src="https://cdn2.iconfinder.com/data/icons/perfect-flat-icons-2/512/Error_warning_alert_attention_remove_dialog.png" />
-                            </p>
+                        <div className={`${SC.allEventsICS.length !== 0 ? 'hidden' : ''} text-lg bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4`} role="alert">
+                            <p className="font-bold">No events to export</p>
+                            <p>Try to import and filter first.</p>
                         </div>
-
-
-
                     </form>
+                    
+                    <div
+                    role="alert"
+                    data-dismissible="alert"
+                    className={`${isDone? '' : 'hidden'} relative flex w-full max-w-screen-md px-4 py-4 text-green-700 rounded-lg font-regular`}>
+                    <div className="shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path fill-rule="evenodd"
+                            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                            clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div className="ml-3 grid grid-cols-3 w-full">
+                    <div className="col-span-2">
+                        <h5 className="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal">
+                        Success
+                        </h5>
+                        <p className="block mt-2 font-sans text-lg antialiased leading-relaxed">
+                        Your events have been exported successfully.
+                        </p>
+                    </div>
+                    <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={handleClose}>
+                        <svg className="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span className="sr-only">Close modal</span>
+                    </button>
+                    </div>
+                        
+                    </div>
                 </div>
             </div>
         </>

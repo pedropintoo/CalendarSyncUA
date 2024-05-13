@@ -206,7 +206,7 @@ function ImportModal(){
               </div>
               <form  className='p-4 md:p-5 overflow-y-auto'>
                 <div className={`${eventsToImport.length == 0? '' : 'hidden'} bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mb-3`} role="alert">
-                  <p className="text-sm"><b>.ics</b> files are used to store calendar information. <br />Upload it to add events to your calendar </p>
+                  <p className="text-sm"><b>.ics</b> files are used to store calendar information. <br />Upload it to add events to your calendar. </p>
                 </div>                
                 <label htmlFor="dropzone-file" className={`${eventsToImport.length == 0? '' : 'hidden'} flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:border-gray-500 hover:bg-gray-100`}>
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -248,7 +248,7 @@ function ImportModal(){
                   <div className="m-1 my-3 border-2 border-gray-200">
                     <ul className={`${tagsInEventsToImport.length < 8? '' : 'h-64' } px-2 py-2 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton`}>
                     {Object.values(tagsInEventsToImport).map((tagName) => (
-                      <li>
+                      <li key={tagName}>
                         <label htmlFor={`id-${tagName}`} className="flex h-8 items-center rounded hover:bg-sky-600 text-gray-900 hover:text-gray-50  ">
                           <div className="w-full ms-2 text-sm font-medium  rounded">
                             <input checked={isTagChecked(tagName)} onChange={(event) => handleTagCheckBox(event, tagName)} id={`id-${tagName}`} type="checkbox" value="" className="w-4 h-4 me-2 text-blue-600 bg-gray-100 border-gray-300 hover:text-gray-50 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
