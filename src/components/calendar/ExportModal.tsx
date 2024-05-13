@@ -1,7 +1,5 @@
-import { MouseEventHandler, useCallback, useState } from "react";
 import { useCalendarContext } from "../contexts/CalendarContext";
-import { EventICSProps, StructureContextType, useStructureContext } from "../contexts/StructureContext";
-import { colors } from "../MainStructure";
+import { useStructureContext } from "../contexts/StructureContext";
 import TaskEvent from "../tasks/TaskEvent";
 
 function ExportModal() {
@@ -46,8 +44,6 @@ function ExportModal() {
     };
 
     const CC = useCalendarContext();
-    const SC = useStructureContext();
-    const [isExportOpen, setExportOpen] = useState(false);
 
     if (!CC.isExportOpen) return null;
 
