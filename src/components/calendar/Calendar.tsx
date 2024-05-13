@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import ImportModal from './ImportModal'
 import AddEventModal from './AddEventModal';
+import ExportModal from './ExportModal';
 import { CalendarContext, useCalendarContext } from '../contexts/CalendarContext';
 import Day from './Day';
 import Button from './Button';
+import { useStructureContext } from '../contexts/StructureContext';
 
 const Months = [
     "January", "February", "March", "April", "May", "June",
@@ -32,6 +34,8 @@ const HeaderButtons: React.FC = () => {
         CC.setExportOpen(true);
     }
 
+    const SC = useStructureContext()
+
     return (
         <>
             <div className="flex border-solid border-b-2 border-sky-600 justify-between items-center px-4 py-2">
@@ -41,13 +45,21 @@ const HeaderButtons: React.FC = () => {
                         <AddEventModal setAddEventOpen={setAddEventOpenLocal} day={null}/>}
                 </div>
                 <div>
-                    <Button label="Import" onClick={handleImport} />
-                    {CC.isImportOpen &&
-                        <ImportModal />}
-                    <Button label="Export" onClick={handleExport} />
-                    {CC.isExportOpen &&
-                        <ImportModal />}
-                </div>
+                <div className='grid grid-cols-2'>
+                    <div className='w-full h-full'>
+                        <div className='relative'>
+                        <div className={`${CC.isImportOpen || SC.allEventsICS.length != 0 ? 'hidden' : ''} absolute top-0 left-0 -ml-1 -mt-1 w-4 h-4 rounded-full bg-sky-300 animate-ping`}></div>
+                        <Button label="Import" onClick={handleImport} />
+                        </div>
+                    </div>
+                        {CC.isImportOpen &&
+                            <ImportModal />}
+                        <Button label="Export" onClick={handleExport} />
+                        {CC.isExportOpen &&
+                            <ExportModal />}
+                    </div>
+                </div>    
+                
             </div>
         </>
     );
@@ -84,25 +96,23 @@ function CalendarHeader() {
         <>
             <div className='flex justify-center items-center'>
                 <div className='w-90 items-center justify-center py-1'>
-                    <div className='text-center rounded-md bg-white shadow-sm grid grid-cols-3 gap-1 border-2 border-solid'>
+                    <div className='text-center rounded-md bg-white grid grid-cols-6 gap-1 border-2 border-solid'>
                         <button onClick={handlePrevMonth} type="button" className="flex align-center justify-center py-2">
                             <span className="sr-only">Previous month</span>
                             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
                             </svg>
                         </button>
-                        <div className=' items-center grid grid-cols-2 gap-1'>
-                            <select value={Months[CC.currentMonthIndex]} onChange={(e) => handleMonthChange(Months.indexOf(e.target.value))} className="cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
+                            <select value={Months[CC.currentMonthIndex]} onChange={(e) => handleMonthChange(Months.indexOf(e.target.value))} className="items-center text-center bg-white col-span-2 cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
                                 {Months.map((month, index) => (
                                     <option key={index} value={month}>{month}</option>
                                 ))}
                             </select>
-                            <select value={CC.currentYear} onChange={(e) => CC.setYear(parseInt(e.target.value))} className="cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
+                            <select value={CC.currentYear} onChange={(e) => CC.setYear(parseInt(e.target.value))} className="items-center text-center bg-white col-span-2 cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
                                 {Array.from({ length: 10 }, (_, i) => CC.currentYear - 5 + i).map((year, index) => (
                                     <option key={index} value={year}>{year}</option>
                                 ))}
                             </select>
-                        </div>
                         <button onClick={handleNextMonth} type="button" className="flex align-center justify-center py-2">
                             <span className="sr-only">Next month</span>
                             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -192,11 +202,11 @@ function Calendar() {
 
     return (
         <>
-            <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600">
+            <div className="border-solid bg-slate-200 lg:col-span-4 h-full rounded-lg border-2 border-sky-600">
                 <CalendarContext.Provider value={{ currentMonthIndex, currentYear, setMonthIndex, setYear, isAddEventOpen, setAddEventOpen, isImportOpen, setImportOpen, isExportOpen, setExportOpen }}>
                     <HeaderButtons />
                     <CalendarHeader />
-                    <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+                    <div className=" rign lg:flex lg:flex-auto lg:flex-col">
                         <WeekDays />
                         <CalendarGrid />
                     </div>

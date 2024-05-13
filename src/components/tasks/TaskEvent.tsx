@@ -48,14 +48,17 @@ function TaskEvent({event , isActive}: {event: EventICSProps, isActive: boolean}
 
     return (
         <>
-            <div className="relative mx-2 my-4 px-1 py-1 rounded cursor-pointer overflow-x-auto whitespace-nowrap" onClick={handleViewEvent}>
+            <div className={`relative ${isActive? 'hover:bg-gray-300' : ''} mx-2 my-4 px-1 py-1 rounded cursor-pointer overflow-x-auto whitespace-nowrap`} onClick={handleViewEvent}>
                 {/* Left color bar */}
                 <div className="absolute w-2 rounded-tl-none rounded-bl-none h-full left-0 top-0" ref={taskEventRef}  style={{backgroundColor: color}}></div>
                 {/* Event content with padding only on the right and top/bottom to leave space for the color bar */}
                 <div className="p-0 pl-3">
-                    <span style={{color: `${color}`}}>{event.title} <br/>{event.tagName.split('-')[1]}</span>
+                    <span style={{color: `${color}`}}>{event.title} <br/>{titleCase(event.tagName.replace(/[0-9]+[-]/, ''))}</span>
                 </div>
-                <div className="p-0 pl-3">                
+                <div className="p-0 pl-3">    
+                    <span className={`${isOneDay ? 'me-1' : 'hidden'}`}>
+                        {event.startDate.toLocaleDateString("eng", {hour: "2-digit", minute: "2-digit"}).split(", ")[1]} -
+                    </span>            
                     <span>{event.startDate.toLocaleDateString("eng", options)} 
                         <span className={`${isOneDay ? 'hidden' : ''}`}>
                             - {event.endDate.toLocaleDateString("eng", options)}

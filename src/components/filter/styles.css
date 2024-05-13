@@ -1,9 +1,0 @@
-/* styles.css */
-.label {
-    padding: 10px;
-    border-radius: 5px;
-    border: 2px solid #ccc; /* Cor padrão */
-}
-.checkedLabel {
-    border-color: #ff6347; /* Cor quando checado */
-}
