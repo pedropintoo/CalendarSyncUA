@@ -2,7 +2,7 @@ import { EventICSProps, useStructureContext } from "../contexts/StructureContext
 import React, { useRef, useEffect } from 'react';
 import Button from "../calendar/Button";
 
-const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates, openEdit, setConfirm}: {thisEvent: EventICSProps, setIsOpen : React.Dispatch<React.SetStateAction<boolean>>, openEdit: React.Dispatch<React.SetStateAction<boolean>>,  setConfirm: React.Dispatch<React.SetStateAction<boolean>>}) => {
+const ViewEventModal = ({ thisEvent, setIsOpen, clickCoordinates, openEdit, setConfirm }: { thisEvent: EventICSProps, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, openEdit: React.Dispatch<React.SetStateAction<boolean>>, setConfirm: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const SC = useStructureContext();
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -17,13 +17,13 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates, openEdit, setCo
         setIsOpen(false);
     }
 
-    const handleEditEvent = () =>{
-        SC.setEditEventOpen(true); 
+    const handleEditEvent = () => {
+        SC.setEditEventOpen(true);
         closeModal();
-        openEdit(true); 
+        openEdit(true);
     }
 
-    const handleConfirm = () => {  
+    const handleConfirm = () => {
         console.log("confirm");
         setConfirm(true);
         closeModal();
@@ -49,35 +49,77 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates, openEdit, setCo
 
     return (
         <>
-            <div className="fixed z-50" style={{ top: clickCoordinates.y, left: clickCoordinates.x}}>
-                <div ref={modalRef} className="relative p-8 w-full max-w-sm max-h-full bg-white p-8 rounded-lg shadow-lg">
-                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                          <h3 className="text-lg overflow-x-auto">
+            <div className="fixed z-50" style={{ top: clickCoordinates.y, left: clickCoordinates.x }}>
+                <div ref={modalRef} className="relative p-6 w-full max-w-md h-full bg-white rounded-lg shadow-lg">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-semibold text-gray-900 overflow-x-auto">
                             {thisEvent.title}
-                          </h3>
-                          <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={(e) => {e.stopPropagation(); closeModal();}}>
-                              <svg className="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14">
-                                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                              </svg>
-                              <span className="sr-only">Close modal</span>
-                          </button>
+                        </h3>
+                        <button
+                            type="button"
+                            className="rounded-lg p-2 inline-flex items-center justify-center text-gray-500 hover:text-gray-800"
+                            onClick={(e) => { e.stopPropagation(); closeModal(); }}
+                            aria-label="Close"
+                        >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
-                    <div className="p-4 md:p-5">
-                        <p className="text-sm text-gray-500">
-                            {adjustedStartDate.toISOString().split('T')[0]} | {adjustedEndDate.toISOString().split('T')[0]}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                            {adjustedStartDate.toISOString().split('T')[1].split(':00.000Z')[0]} - {adjustedEndDate.toISOString().split('T')[1].split(':00.000Z')[0]}
+                    {thisEvent.description && (
+                        <div className="mb-4 overflow-y-auto overflow-x-hidden" style={{ maxHeight: '100px' }}>
+                            <label htmlFor='description' className='block text-sm font-medium text-gray-700 '>Description:</label>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-normal">
+                                {thisEvent.description}
+                            </p>
+                        </div>
+                    )}
+                    <div className='grid gap-4 mb-4 grid-cols-2 text-sm'>
+                        <div>
+                            <h4 className='font-medium text-gray-700'>Start Date:</h4>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                {adjustedStartDate.toLocaleDateString()}
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className='font-medium text-gray-700'>End Date:</h4>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                {adjustedEndDate.toLocaleDateString()}
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className='font-medium text-gray-700'>Start Time:</h4>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                {adjustedStartDate.toLocaleTimeString()}
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className='font-medium text-gray-700'>End Time:</h4>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                {adjustedEndDate.toLocaleTimeString()}
+                            </p>
+                        </div>
+                    </div>
+                    <div className='mb-10'>
+                        <h4 className='block text-sm font-medium text-gray-700'>Tag:</h4>
+                        <p className="text-gray-600">
+                            {thisEvent.tagName}
                         </p>
                     </div>
-                    <div className="flex justify-center mt-4 ">
-                        <Button label="Edit" onClick={handleEditEvent}/>
-                        <button className="text-white inline-flex items-center font-bold py-2 px-4 m-1 rounded bg-red-600 hover:bg-red-500" onClick={(e) => {e.stopPropagation(); handleConfirm();}}>
+                    <div className="flex justify-evenly mt-4">
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out" onClick={handleEditEvent}>
+                            Edit
+                        </button>
+                        <button
+                            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out"
+                            onClick={(e) => { e.stopPropagation(); handleConfirm(); }}
+                        >
                             Delete
                         </button>
                     </div>
                 </div>
             </div>
+
         </>
     )
 };
