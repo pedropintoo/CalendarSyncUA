@@ -50,13 +50,11 @@ const ViewEventModal = ({ thisEvent, setIsOpen, clickCoordinates, openEdit, setC
     return (
         <>
             <div className="fixed z-50" style={{ top: clickCoordinates.y, left: clickCoordinates.x }}>
-                <div ref={modalRef} className="relative p-6 w-full max-w-md h-full bg-white rounded-lg shadow-lg dark:bg-gray-700">
+                <div ref={modalRef} className="relative p-6 w-full max-w-md h-full bg-white dark:bg-gray-700 rounded-lg shadow-lg">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white overflow-visible">
+                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white overflow-x-auto">
                             {thisEvent.title}
                         </h3>
-
-
                         <button
                             type="button"
                             className="rounded-lg p-2 inline-flex items-center justify-center text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"
@@ -109,7 +107,7 @@ const ViewEventModal = ({ thisEvent, setIsOpen, clickCoordinates, openEdit, setC
                         </p>
                     </div>
                     <div className="flex justify-evenly mt-4">
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out" onClick={handleEditEvent}  >
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out" onClick={handleEditEvent}>
                             Edit
                         </button>
                         <button
@@ -120,8 +118,8 @@ const ViewEventModal = ({ thisEvent, setIsOpen, clickCoordinates, openEdit, setC
                         </button>
                     </div>
                 </div>
-
             </div>
+
         </>
     )
 };
