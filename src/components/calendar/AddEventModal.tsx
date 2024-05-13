@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useStructureContext } from '../contexts/StructureContext';
 import { useCalendarContext } from '../contexts/CalendarContext';
+import { titleCase } from '../MainStructure';
 
 interface AddEventForm {
   title: string;
@@ -130,7 +131,7 @@ function AddEventModal({setAddEventOpen, day}: {setAddEventOpen:  React.Dispatch
                       <select name="tag" id='tag' value={form.tag} onChange={handleFormChange} className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ' required>
                           <option value="">Select a tag</option>
                           {Object.entries(SC.tags).map(([tagName]) => (
-                            <option key={tagName} value={tagName}>{tagName}</option>
+                            <option key={tagName} value={tagName}>{titleCase(tagName.replace(/[0-9]+[-]/, ''))}</option>
                           ))}
                       </select>
                   </div>

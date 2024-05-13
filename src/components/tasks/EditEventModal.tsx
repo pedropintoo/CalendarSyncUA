@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { EventICSProps, useStructureContext } from '../contexts/StructureContext';
+import { titleCase } from '../MainStructure';
 
 const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSProps, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, setIsView: React.Dispatch<React.SetStateAction<boolean>>} ) => {
   const SC = useStructureContext();
   const [form, setForm] = useState({
     title: thisEvent.title,
-    description: thisEvent.description,
+    description: thisEvent.description, 
     startDate: thisEvent.startDate.toISOString().split('T')[0],
     startHour: '',
     endDate: thisEvent.endDate.toISOString().split('T')[0],
