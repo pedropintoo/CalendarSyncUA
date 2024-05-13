@@ -1,6 +1,7 @@
 import { EventICSProps, useStructureContext } from "../contexts/StructureContext";
 import React, { useRef, useEffect } from 'react';
 import Button from "../calendar/Button";
+import { titleCase } from '../MainStructure';
 
 const ViewEventModal = ({ thisEvent, setIsOpen, clickCoordinates, openEdit, setConfirm }: { thisEvent: EventICSProps, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, openEdit: React.Dispatch<React.SetStateAction<boolean>>, setConfirm: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const SC = useStructureContext();
@@ -70,7 +71,7 @@ const ViewEventModal = ({ thisEvent, setIsOpen, clickCoordinates, openEdit, setC
                         <div className="mb-4 overflow-y-auto overflow-x-hidden" style={{ maxHeight: '100px' }}>
                             <label htmlFor='description' className='block text-sm font-medium text-gray-700 '>Description:</label>
                             <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-normal">
-                                {thisEvent.description}
+                                {titleCase(thisEvent.description.replace(/[0-9]+[-]/, ''))}
                             </p>
                         </div>
                     )}
@@ -90,28 +91,26 @@ const ViewEventModal = ({ thisEvent, setIsOpen, clickCoordinates, openEdit, setC
                         <div>
                             <h4 className='font-medium text-gray-700'>Start Time:</h4>
                             <p className="text-gray-600 dark:text-gray-400">
-                                {adjustedStartDate.toLocaleTimeString()}
+                                {adjustedStartDate.toISOString().split('T')[1].split(':00.000Z')[0]}
                             </p>
                         </div>
                         <div>
                             <h4 className='font-medium text-gray-700'>End Time:</h4>
                             <p className="text-gray-600 dark:text-gray-400">
-                                {adjustedEndDate.toLocaleTimeString()}
+                                {adjustedEndDate.toISOString().split('T')[1].split(':00.000Z')[0]}
                             </p>
                         </div>
                     </div>
                     <div className='mb-10'>
                         <h4 className='block text-sm font-medium text-gray-700'>Tag:</h4>
-                        <p className="text-gray-600">
-                            {thisEvent.tagName}
+                        <p className="text-gray-600 overflow-y-auto ">
+                            {titleCase(thisEvent.tagName.replace(/[0-9]+[-]/, ''))}
                         </p>
                     </div>
-                    <div className="flex justify-evenly mt-4">
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out" onClick={handleEditEvent}>
-                            Edit
-                        </button>
+                    <div className="flex justify mt-4 grid grid-cols-2 grid-gap-1">
+                        <Button label="Edit" onClick={handleEditEvent}/>
                         <button
-                            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out"
+                            className="bg-red-600 hover:bg-red-700 text-white inline-flex items-center font-bold py-2 px-4 m-1 rounded"
                             onClick={(e) => { e.stopPropagation(); handleConfirm(); }}
                         >
                             Delete
