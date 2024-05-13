@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useStructureContext } from '../contexts/StructureContext';
 import { titleCase } from '../MainStructure';
-import './styles.css';
-
-
 
 
 function Filter() {
@@ -76,7 +73,7 @@ function Filter() {
           className={`my-1 mt-3 p-0 text-sm font-medium inline-flex items-center justify-between w-full rounded-lg cursor-pointer border-2 hover:bg-gray-300`}
           onClick={() => handleTagCheckboxChange(tagName)}>                           
             <p className='mx-5 my-2 '>
-                {titleCase(tagName.split('-')[1])}
+                {titleCase(tagName.replace(/[0-9]+[-]/, ''))}
               </p>
           </label>
         </li>
