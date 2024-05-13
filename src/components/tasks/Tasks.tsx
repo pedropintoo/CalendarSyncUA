@@ -1,15 +1,8 @@
 import TaskEvent  from './TaskEvent'; 
 import { useStructureContext } from '../contexts/StructureContext';
-import { useCalendarContext } from '../contexts/CalendarContext';
 
 function Tasks() {
     const SC = useStructureContext();
-    const CC = useCalendarContext();
-    console.log(CC.currentMonthIndex)
-
-    const displayedEvents = SC.filteredEventsICS.filter(event => {
-        return event.startDate >= new Date();
-    });
 
     return (
         <>
@@ -19,7 +12,7 @@ function Tasks() {
                 </div>
                 <div className='relative h-dvh overflow-y-auto'>
                     {/* Aqui você pode mapear os eventos filtrados e renderizar a informação desejada */}
-                    {displayedEvents.map((event) => (
+                    {SC.filteredEventsICS.map((event) => (
                         <TaskEvent isActive={true} key={event.id}event={event} />
                     ))}
                 </div>
