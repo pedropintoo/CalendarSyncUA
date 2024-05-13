@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EventICSProps, useStructureContext } from '../contexts/StructureContext';
 
 const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSProps, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, setIsView: React.Dispatch<React.SetStateAction<boolean>>} ) => {
@@ -7,13 +7,25 @@ const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSP
     title: thisEvent.title,
     description: thisEvent.description,
     startDate: thisEvent.startDate.toISOString().split('T')[0],
-    startHour: thisEvent.startDate.toISOString().split('T')[1].split(':00.000Z')[0],
+    startHour: '',
     endDate: thisEvent.endDate.toISOString().split('T')[0],
-    endHour: thisEvent.endDate.toISOString().split('T')[1].split(':00.000Z')[0],
+    endHour: '',
     tag: thisEvent.tagName,
   });
 
-  console.log("Event to edit: ", thisEvent)
+  useEffect(() => {
+    const convertTimeDate = (date: Date) => {
+      const offsetMinutes = date.getTimezoneOffset();
+      const adjustedDate = new Date(date.getTime() - (offsetMinutes * 60000));
+      return adjustedDate;
+    }
+    setForm(prevForm => ({
+      ...prevForm,
+      startHour: convertTimeDate(thisEvent.startDate).toISOString().split('T')[1].split(':00.000Z')[0],
+      endHour: convertTimeDate(thisEvent.endDate).toISOString().split('T')[1].split(':00.000Z')[0],
+    }));
+  }, [thisEvent.startDate, thisEvent.endDate]);
+
   
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm({...form, [event.target.name]: event.target.value });
@@ -28,6 +40,7 @@ const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSP
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); 
+    event.stopPropagation();
     // Create a new event with the form data
     const newStartDate = new Date(`${form.startDate}T${form.startHour}:00.000Z`);
     newStartDate.setTime(newStartDate.getTime() + newStartDate.getTimezoneOffset() * 60 * 1000);
@@ -45,7 +58,7 @@ const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSP
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-20 z-50 ">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-20 z-50 " onClick={(e) => {e.stopPropagation();}}>
         <div className='relative p-8 w-full max-w-2xl max-h-full bg-white p-8 rounded-lg shadow-lg'>
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                   <h3 className="text-lg">
@@ -97,7 +110,7 @@ const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSP
                   </div>
                   
                 <div className='grid gap-4 mb-4 grid-cols-2'>
-                  <button type="submit" className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  <button type="submit" className="text-white inline-flex items-center bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                       <svg className="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
                       Save changes
                   </button>

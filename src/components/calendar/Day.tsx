@@ -36,7 +36,7 @@ function Day ({ date } : { date: Date }) {
     return (
         <>
             <div className={`relative px-3 py-2 cursor-pointer h-36 overflow-y-auto ${isToday ? 'border-2 border-black-100' : ''}  ${isMonth? 'bg-white': 'bg-gray-100'}`}
-                onClick={handleDayClick}><p className={`${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-6 h-6' : ''}`}>{currentDayOfMonth}</p>
+                onClick={(e) => {e.stopPropagation(); handleDayClick();}}><p className={`${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-6 h-6' : ''}`}>{currentDayOfMonth}</p>
                 <div>
                     {events.map((event) => (
                     <CalendarEvent 
