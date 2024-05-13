@@ -59,16 +59,12 @@ function AddEventModal({setAddEventOpen, day}: {setAddEventOpen:  React.Dispatch
       startDate.setTime(startDate.getTime() + startDate.getTimezoneOffset() * 60 * 1000);
       const endDate = new Date(`${form.endDate}T${form.endHour}:00.000Z`);
       endDate.setTime(endDate.getTime() + endDate.getTimezoneOffset() * 60 * 1000);
-      const fetchLastEventId = () => {
-        const lastEvent = SC.allEventsICS[SC.allEventsICS.length - 1];
-        if (lastEvent) {
-          return parseInt(lastEvent.id) + 1;
-        } else {
-          return 1;
-        }
+      const fetchEventId = () => {
+        const largestEventId = Math.max(...SC.allEventsICS.map(event => parseInt(event.id)));
+        return largestEventId >= 0 ? largestEventId + 1 : 1;
       };
 
-      const eventId = fetchLastEventId();
+      const eventId = fetchEventId();
       const newEvent = {
         id: eventId.toString(),
         title: form.title,
