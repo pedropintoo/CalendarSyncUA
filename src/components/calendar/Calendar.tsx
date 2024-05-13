@@ -85,25 +85,23 @@ function CalendarHeader() {
         <>
             <div className='flex justify-center items-center'>
                 <div className='w-90 items-center justify-center py-1'>
-                    <div className='text-center rounded-md bg-white shadow-sm grid grid-cols-3 gap-1 border-2 border-solid'>
+                    <div className='text-center rounded-md bg-white shadow-sm grid grid-cols-6 gap-1 border-2 border-solid'>
                         <button onClick={handlePrevMonth} type="button" className="flex align-center justify-center py-2">
                             <span className="sr-only">Previous month</span>
                             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
                             </svg>
                         </button>
-                        <div className=' items-center grid grid-cols-2 gap-1'>
-                            <select value={Months[CC.currentMonthIndex]} onChange={(e) => handleMonthChange(Months.indexOf(e.target.value))} className="cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
+                            <select value={Months[CC.currentMonthIndex]} onChange={(e) => handleMonthChange(Months.indexOf(e.target.value))} className="items-center text-center bg-white col-span-2 cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
                                 {Months.map((month, index) => (
                                     <option key={index} value={month}>{month}</option>
                                 ))}
                             </select>
-                            <select value={CC.currentYear} onChange={(e) => CC.setYear(parseInt(e.target.value))} className="cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
+                            <select value={CC.currentYear} onChange={(e) => CC.setYear(parseInt(e.target.value))} className="items-center text-center bg-white col-span-2 cursor-pointer hover:bg-gray-100 rounded-md px-2 py-1 block w-full">
                                 {Array.from({ length: 10 }, (_, i) => CC.currentYear - 5 + i).map((year, index) => (
                                     <option key={index} value={year}>{year}</option>
                                 ))}
                             </select>
-                        </div>
                         <button onClick={handleNextMonth} type="button" className="flex align-center justify-center py-2">
                             <span className="sr-only">Next month</span>
                             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

@@ -55,7 +55,7 @@ function Filter() {
         <div className="py-5 px-5 flex justify-center border-solid border-b-2 border-sky-600">
           <h1 className="">Filter</h1>
         </div>
-        <label htmlFor="selectAll" className="cursor-pointer text-bg text-black-500 ml-2 me-2 rounded h-10 my-2 hover:bg-sky-600 hover:bg-opacity-80 text-gray-900 hover:text-gray-50 flex items-center border-solid border-b-2 pb-3 pt-3 border-sky-600">
+        <label htmlFor="selectAll" className="cursor-pointer text-bg text-black-500 ml-2 me-2 rounded h-10 my-2 hover:bg-gray-300 hover:bg-opacity-80 text-gray-900 flex items-center border-solid border-b-2 pb-3 pt-3 border-sky-600">
         <div key="Tags" className=" ">
           <input type="checkbox" id="selectAll" className="mr-2 ml-3" checked={selectAll} onChange={handleSelectAll} />
           <span>
@@ -73,7 +73,7 @@ function Filter() {
           style={{
             border: `2px solid ${selectedTags[tagName] ? SC.tags[tagName] : '#d1d5db'}` 
           }}
-          className={`my-1 mt-3 p-0 text-sm font-medium inline-flex items-center justify-between w-full rounded-lg cursor-pointer border-2 hover:bg-gray-200`}
+          className={`my-1 mt-3 p-0 text-sm font-medium inline-flex items-center justify-between w-full rounded-lg cursor-pointer border-2 hover:bg-gray-300`}
           onClick={() => handleTagCheckboxChange(tagName)}>                           
             <p className='mx-5 my-2 '>
                 {titleCase(tagName.split('-')[1])}

@@ -35,8 +35,12 @@ function Day ({ date } : { date: Date }) {
 
     return (
         <>
-            <div className={`relative px-3 py-2 cursor-pointer h-36 overflow-y-auto ${isToday ? 'border-2 border-black-100' : ''}  ${isMonth? 'bg-white': 'bg-gray-100'}`}
-                onClick={(e) => {e.stopPropagation(); handleDayClick();}}><p className={`${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-6 h-6' : ''}`}>{currentDayOfMonth}</p>
+            <div className={`group relative px-3 py-2 cursor-pointer h-36 overflow-y-auto ${isToday ? 'border-2 border-black-100' : ''}  ${isMonth? 'bg-white': 'bg-gray-100'} hover:bg-sky-50`}
+                onClick={(e) => {e.stopPropagation(); handleDayClick();}}>
+                <div className='grid grid-cols-4'>
+                    <p className={`col-span-3 ${isToday ? 'flex items-center justify-center font-semibold border border-gray-300 rounded-full w-6 h-6' : ''}`}>{currentDayOfMonth}</p>
+                    <p className={`hidden opacity-60 ms-2 mb-2 h-8 w-8 group-hover:block hover:opacity-100`} ><img src="https://static.thenounproject.com/png/1515272-200.png"></img></p>
+                </div>
                 <div>
                     {events.map((event) => (
                     <CalendarEvent 
