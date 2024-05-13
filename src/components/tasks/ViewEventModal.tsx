@@ -6,6 +6,12 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates, openEdit, setCo
     const SC = useStructureContext();
     const modalRef = useRef<HTMLDivElement>(null);
 
+    // Convert the dates the correctly time-zone
+    const offsetMinutesStart = thisEvent.startDate.getTimezoneOffset();
+    const adjustedStartDate = new Date(thisEvent.startDate.getTime() - (offsetMinutesStart * 60000));
+    const offsetMinutesEnd = thisEvent.endDate.getTimezoneOffset();
+    const adjustedEndDate = new Date(thisEvent.endDate.getTime() - (offsetMinutesEnd * 60000));
+
     const closeModal = () => {
         SC.setViewEventOpen(false);
         setIsOpen(false);
@@ -58,10 +64,10 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates, openEdit, setCo
                     </div>
                     <div className="p-4 md:p-5">
                         <p className="text-sm text-gray-500">
-                            {thisEvent.startDate.toISOString().split('T')[0]} | {thisEvent.endDate.toISOString().split('T')[0]}
+                            {adjustedStartDate.toISOString().split('T')[0]} | {adjustedEndDate.toISOString().split('T')[0]}
                         </p>
                         <p className="text-sm text-gray-500">
-                            {thisEvent.startDate.toISOString().split('T')[1].split(':00.000Z')[0]} - {thisEvent.endDate.toISOString().split('T')[1].split(':00.000Z')[0]}
+                            {adjustedStartDate.toISOString().split('T')[1].split(':00.000Z')[0]} - {adjustedEndDate.toISOString().split('T')[1].split(':00.000Z')[0]}
                         </p>
                     </div>
                     <div className="flex justify-center mt-4 ">

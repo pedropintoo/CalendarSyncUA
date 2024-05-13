@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EventICSProps, useStructureContext } from '../contexts/StructureContext';
 
 const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSProps, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, setIsView: React.Dispatch<React.SetStateAction<boolean>>} ) => {
@@ -7,11 +7,25 @@ const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSP
     title: thisEvent.title,
     description: thisEvent.description,
     startDate: thisEvent.startDate.toISOString().split('T')[0],
-    startHour: thisEvent.startDate.toISOString().split('T')[1].split(':00.000Z')[0],
+    startHour: '',
     endDate: thisEvent.endDate.toISOString().split('T')[0],
-    endHour: thisEvent.endDate.toISOString().split('T')[1].split(':00.000Z')[0],
+    endHour: '',
     tag: thisEvent.tagName,
   });
+
+  useEffect(() => {
+    const convertTimeDate = (date: Date) => {
+      const offsetMinutes = date.getTimezoneOffset();
+      const adjustedDate = new Date(date.getTime() - (offsetMinutes * 60000));
+      return adjustedDate;
+    }
+    setForm(prevForm => ({
+      ...prevForm,
+      startHour: convertTimeDate(thisEvent.startDate).toISOString().split('T')[1].split(':00.000Z')[0],
+      endHour: convertTimeDate(thisEvent.endDate).toISOString().split('T')[1].split(':00.000Z')[0],
+    }));
+  }, [thisEvent.startDate, thisEvent.endDate]);
+
   
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm({...form, [event.target.name]: event.target.value });
