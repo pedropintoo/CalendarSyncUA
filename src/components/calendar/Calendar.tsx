@@ -96,7 +96,7 @@ function CalendarHeader() {
         <>
             <div className='flex justify-center items-center'>
                 <div className='w-90 items-center justify-center py-1'>
-                    <div className='text-center rounded-md bg-white shadow-sm grid grid-cols-6 gap-1 border-2 border-solid'>
+                    <div className='text-center rounded-md bg-white grid grid-cols-6 gap-1 border-2 border-solid'>
                         <button onClick={handlePrevMonth} type="button" className="flex align-center justify-center py-2">
                             <span className="sr-only">Previous month</span>
                             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
