@@ -121,6 +121,9 @@ function ImportModal(){
 
   const handleClose = () =>{
     CC.setImportOpen(false);
+    setEventsToImport([]);
+    setUnselectedEvents([]);
+    setTagsInEventsToImport([]);
   }
 
   function handleConfirm() {
@@ -139,6 +142,9 @@ function ImportModal(){
     SC.setTags({...SC.tags, ...newTags});
     SC.setAllEventsICS([...SC.allEventsICS, ...newEvents]);
     CC.setImportOpen(false);
+    setEventsToImport([]);
+    setUnselectedEvents([]);
+    setTagsInEventsToImport([]);
   }
   
   function handleCheckboxChange(id: string): void {

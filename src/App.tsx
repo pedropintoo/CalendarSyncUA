@@ -4,8 +4,10 @@ import MainStructure from './components/MainStructure'
 function App() {
   return (
     <>
-      <Navbar/>
-      <MainStructure/>
+      <div className='h-dvh'>
+        <Navbar/>
+        <MainStructure/>
+      </div>
     </>
   )
 }
