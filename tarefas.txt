@@ -1,5 +1,30 @@
 !!! DAR CONTEXTO !!!
 
+És aluno da Universidade de Aveiro e reparas que foram tens novas tarefas/exames de IHC tanto no eLearning como no Paco e precisas de as exportar para o teu calendário pessoal.
+Como estamos acostumados tanto no eLearning como no Paco tem 
+Para isso utilizas a nossa aplicação para ir buscar todo o conteúdo dos calendários do eLearning e do Paco e retirar esse "lixo", ficando só com os eventos de IHC, e de seguida exportares para o teu calendario pessoal.
+
+Task 1 - Importar calendarios:
+  - Importar calendário do Paco e do eLearning.
+  - Verificar que a importação correu como pretendido.
+
+Task 2 - Eliminar tarefa:
+  - Eliminar tarefa que foi mal importada do Paco (tarefa IHC de Setembro).
+
+Task 3 - Alterar tarefas:
+  - Mudar os nomes dos Exames de IHC para (época normal e época de recurso)
+  - Verificar se tudo foi bem 
+  - Exportar as tarefas IHC do Paco para o calendario pessoal
+
+Task 2:
+  - Importar calendario do eLearning.
+  - Verificar que a importação correu como pretendido.
+  - Adicionar um evento "Bootcamp de IHC" de dia 18 de maio (12h) a 25 de maio 
+  - Exportar as tarefas IHC do eLearning para o calendario pessoal
+
+
+
+
 Aluno: (tirar o lixo dos imports)
   - Importar calendario do elearning (2 tarefas) e do paco (e verificar) - sem algumas coisas... IMPORTANTE!!!!
   - filtrar.... e por tipo de coisa

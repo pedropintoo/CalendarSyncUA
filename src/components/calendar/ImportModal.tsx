@@ -21,6 +21,7 @@ const handleFileUpload = (SC: StructureContextType, setEventsToImport: React.Dis
   };
 
   const eventsToImport = [] as EventICSProps[];
+  const tagsToImport = [] as string[];
 
   if (!event.target.files) return;
 
@@ -66,16 +67,32 @@ const handleFileUpload = (SC: StructureContextType, setEventsToImport: React.Dis
           }
           
           console.log("Tag name: ", tagName);
-          if (SC.tags[tagName] === undefined) {
+          if (SC.tags[tagName] === undefined && !tagsToImport.includes(tagName)) {
             // if not found, search for a tag that contains the first part of the tag name
-            for (const tag in SC.tags)  {
+            console.log(SC.tags)
+            Object.keys(SC.tags).forEach(tag => {
               console.log("Tag: ", tag, tagName.split('-')[0]);
               if (tag.includes(tagName.split('-')[0])) {
                 tagName = tag;
+                return;
+              }
+            });
+              
+            
+
+            for (const tag in tagsToImport)  {
+              console.log("Tag: ", tagsToImport[tag], tagName.split('-')[0]);
+              if (tagsToImport[tag].includes(tagName.split('-')[0])) {
+                tagName = tagsToImport[tag];
                 break;
               }
             }
           }
+
+          if (!tagsToImport.includes(tagName)) {
+            tagsToImport.push(tagName);
+          }
+          
 
           const newEvent = {
             id: eventId.toString(),
@@ -221,19 +238,20 @@ function ImportModal(){
                     <div>
                       <p className="font-bold">Download <b>.ics</b> files</p>
                       <p className="text-sm">Hear are some links where you can download <b>.ics</b> files.</p>
-                      <div className="grid grid-cols-3 gap-3">
+                      <div className="grid grid-cols-3 gap-2">
                         <div className="my-4">
+                          <button type="submit" onClick={openPaco} className="w-28 text-white hover:text-gray-100 inline-flex items-center bg-teal-500 hover:bg-teal-400 focus:ring-4 focus:outline-none focus:ring-teal-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                          <img className="me-2 ms-2 text-center align-middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEWAAAD///+7aYsFAAAAKklEQVR4AWNgYGQAAvs/UAQEQBH7/wzKMxlsyxgMyxh0wchwJsP//0AEAPI1DRQU5KYeAAAAAElFTkSuQmCC" alt="eLearning"/>
+                              Paco
+                          </button>
+                        </div>
+                        <div className="my-4 w-full">
                           <button type="submit" onClick={openElearning} className="text-white hover:text-gray-100 inline-flex items-center bg-teal-500 hover:bg-teal-400 focus:ring-4 focus:outline-none focus:ring-teal-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                           <img className="me-2" src="https://elearning.ua.pt/pluginfile.php/1/core_admin/favicon/64x64/1707728245/favicon.png" alt="eLearning"/>
                               eLearning
                           </button>
                         </div>
-                        <div className="my-4">
-                          <button type="submit" onClick={openPaco} className="text-white hover:text-gray-100 inline-flex items-center bg-teal-500 hover:bg-teal-400 focus:ring-4 focus:outline-none focus:ring-teal-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
-                          <img className="me-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEWAAAD///+7aYsFAAAAKklEQVR4AWNgYGQAAvs/UAQEQBH7/wzKMxlsyxgMyxh0wchwJsP//0AEAPI1DRQU5KYeAAAAAElFTkSuQmCC" alt="eLearning"/>
-                              Paco
-                          </button>
-                        </div>
+                        
                       </div>
                     </div>
                   </div>
