@@ -14,7 +14,7 @@ function CalendarEvent({event, isStartDate}: {event: EventICSProps, isStartDate:
     const [isConfirmOpen, setConfirmOpen] = useState(false);
     const calendarEventRef = useRef<HTMLDivElement>(null);
     function handleViewEvent () {
-        setIsViewOpenLocal(!isViewOpenLocal);
+        setIsViewOpenLocal(true);
         SC.setViewEventOpen(true);
         const rect = calendarEventRef.current?.getBoundingClientRect();
         if (rect) {
@@ -22,9 +22,7 @@ function CalendarEvent({event, isStartDate}: {event: EventICSProps, isStartDate:
             const modaltop = rect.top - 100;
             setClickCoordinates({ x: modalLeft, y: modaltop });
         }
-        setIsViewOpenLocal(!isViewOpenLocal);
         console.log(clickCoordinates);
-        SC.setViewEventOpen(true);
     }
 
     const handleDeleteEvent = () => {

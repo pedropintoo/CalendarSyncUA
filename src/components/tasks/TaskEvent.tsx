@@ -19,7 +19,7 @@ function TaskEvent({event , isActive}: {event: EventICSProps, isActive: boolean}
     const taskEventRef = useRef<HTMLDivElement>(null);
 
     function handleViewEvent () {
-        setIsViewOpenLocal(!isViewOpenLocal);
+        setIsViewOpenLocal(true);
         SC.setViewEventOpen(true);
         const rect = taskEventRef.current?.getBoundingClientRect();
         if (rect) {
@@ -27,9 +27,7 @@ function TaskEvent({event , isActive}: {event: EventICSProps, isActive: boolean}
             const modaltop = rect.top - 100;
             setClickCoordinates({ x: modalLeft, y: modaltop });
         }
-        setIsViewOpenLocal(!isViewOpenLocal);
         console.log(clickCoordinates);
-        SC.setViewEventOpen(true);
     }
 
     const handleDeleteEvent = () => {

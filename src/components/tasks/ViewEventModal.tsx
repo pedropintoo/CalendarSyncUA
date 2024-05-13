@@ -19,20 +19,20 @@ const ViewEventModal = ({thisEvent, setIsOpen, clickCoordinates, openEdit, setCo
 
     const handleEditEvent = () =>{
         SC.setEditEventOpen(true); 
-        SC.setViewEventOpen(false);  
+        closeModal();
         openEdit(true); 
     }
 
     const handleConfirm = () => {  
         console.log("confirm");
         setConfirm(true);
-        SC.setViewEventOpen(false);
+        closeModal();
     }
 
     useEffect(() => {
         // Add event listener when modal is opened
         const handleClickOutside = (event: MouseEvent) => {
-            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+            if (modalRef.current && !(modalRef.current.contains(event.target as Node))) {
                 event.stopPropagation();
                 SC.setViewEventOpen(false);
                 setIsOpen(false);
