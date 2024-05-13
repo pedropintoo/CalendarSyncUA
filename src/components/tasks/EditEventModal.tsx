@@ -12,8 +12,6 @@ const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSP
     endHour: thisEvent.endDate.toISOString().split('T')[1].split(':00.000Z')[0],
     tag: thisEvent.tagName,
   });
-
-  console.log("Event to edit: ", thisEvent)
   
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm({...form, [event.target.name]: event.target.value });
@@ -28,6 +26,7 @@ const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSP
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); 
+    event.stopPropagation();
     // Create a new event with the form data
     const newStartDate = new Date(`${form.startDate}T${form.startHour}:00.000Z`);
     newStartDate.setTime(newStartDate.getTime() + newStartDate.getTimezoneOffset() * 60 * 1000);
@@ -45,7 +44,7 @@ const EditEventModal = ({thisEvent, setIsOpen, setIsView}: {thisEvent: EventICSP
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-20 z-50 ">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-20 z-50 " onClick={(e) => {e.stopPropagation();}}>
         <div className='relative p-8 w-full max-w-2xl max-h-full bg-white p-8 rounded-lg shadow-lg'>
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                   <h3 className="text-lg">

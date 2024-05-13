@@ -57,7 +57,7 @@ function CalendarEvent({event, isStartDate}: {event: EventICSProps, isStartDate:
             </div>
             {SC.isEditEventOpen && isEditOpenLocal && <EditEventModal thisEvent={event} setIsOpen={setIsEditOpenLocal} setIsView={setIsViewOpenLocal}/>}
             {isConfirmOpen && 
-                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-20 z-50 ">
+                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-20 z-50 " onClick={(e) => {e.stopPropagation();}}>
                     <div className="relative p-8 w-full  max-w-2xl max-h-full">
                         <div className="relative bg-white items-center justify-between p-4 md:p-5 rounded shadow-lg">
                             <button type="button" className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={(e)=>{e.stopPropagation(); confirmClose();}}>
