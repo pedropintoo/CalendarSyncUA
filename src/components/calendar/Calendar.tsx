@@ -5,6 +5,7 @@ import ExportModal from './ExportModal';
 import { CalendarContext, useCalendarContext } from '../contexts/CalendarContext';
 import Day from './Day';
 import Button from './Button';
+import { useStructureContext } from '../contexts/StructureContext';
 
 const Months = [
     "January", "February", "March", "April", "May", "June",
@@ -33,6 +34,8 @@ const HeaderButtons: React.FC = () => {
         CC.setExportOpen(true);
     }
 
+    const SC = useStructureContext()
+
     return (
         <>
             <div className="flex border-solid border-b-2 border-sky-600 justify-between items-center px-4 py-2">
@@ -42,13 +45,21 @@ const HeaderButtons: React.FC = () => {
                         <AddEventModal setAddEventOpen={setAddEventOpenLocal} day={null}/>}
                 </div>
                 <div>
-                    <Button label="Import" onClick={handleImport} />
-                    {CC.isImportOpen &&
-                        <ImportModal />}
-                    <Button label="Export" onClick={handleExport} />
-                    {CC.isExportOpen &&
-                        <ExportModal />}
-                </div>
+                <div className='grid grid-cols-2'>
+                    <div className='w-full h-full'>
+                        <div className='relative'>
+                        <div className={`${CC.isImportOpen || SC.allEventsICS.length != 0 ? 'hidden' : ''} absolute top-0 left-0 -ml-1 -mt-1 w-4 h-4 rounded-full bg-sky-300 animate-ping`}></div>
+                        <Button label="Import" onClick={handleImport} />
+                        </div>
+                    </div>
+                        {CC.isImportOpen &&
+                            <ImportModal />}
+                        <Button label="Export" onClick={handleExport} />
+                        {CC.isExportOpen &&
+                            <ExportModal />}
+                    </div>
+                </div>    
+                
             </div>
         </>
     );
@@ -191,11 +202,11 @@ function Calendar() {
 
     return (
         <>
-            <div className="border-solid bg-slate-200 lg:col-span-4 rounded-lg border-2 border-sky-600">
+            <div className="border-solid bg-slate-200 lg:col-span-4 h-full rounded-lg border-2 border-sky-600">
                 <CalendarContext.Provider value={{ currentMonthIndex, currentYear, setMonthIndex, setYear, isAddEventOpen, setAddEventOpen, isImportOpen, setImportOpen, isExportOpen, setExportOpen }}>
                     <HeaderButtons />
                     <CalendarHeader />
-                    <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+                    <div className=" rign lg:flex lg:flex-auto lg:flex-col">
                         <WeekDays />
                         <CalendarGrid />
                     </div>

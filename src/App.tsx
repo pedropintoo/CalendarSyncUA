@@ -4,7 +4,7 @@ import MainStructure from './components/MainStructure'
 function App() {
   return (
     <>
-      <div className='h-dvh'>
+      <div className='h-svh'>
         <Navbar/>
         <MainStructure/>
       </div>
