@@ -185,6 +185,10 @@ function ImportModal(){
 
 
 
+  function isTagChecked(tagName: string): boolean | undefined {
+    return !eventsToImport.some(event => event.tagName === tagName && unselectedEvents.includes(event.id));
+  }
+
   return (
       <>
           <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
@@ -247,7 +251,7 @@ function ImportModal(){
                       <li>
                         <label htmlFor={`id-${tagName}`} className="flex h-8 items-center rounded hover:bg-sky-600 text-gray-900 hover:text-gray-50  ">
                           <div className="w-full ms-2 text-sm font-medium  rounded">
-                            <input defaultChecked onChange={(event) => handleTagCheckBox(event, tagName)} id={`id-${tagName}`} type="checkbox" value="" className="w-4 h-4 me-2 text-blue-600 bg-gray-100 border-gray-300 hover:text-gray-50 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
+                            <input checked={isTagChecked(tagName)} onChange={(event) => handleTagCheckBox(event, tagName)} id={`id-${tagName}`} type="checkbox" value="" className="w-4 h-4 me-2 text-blue-600 bg-gray-100 border-gray-300 hover:text-gray-50 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
                             <span>
                               {titleCase(tagName.replace(/[0-9]+[-]/, ''))}
                             </span>
