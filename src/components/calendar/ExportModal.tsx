@@ -121,7 +121,7 @@ function ExportModal() {
         setUnselectedEvents([...unselectedEvents, ...SC.filteredEventsICS.filter(e => e.tagName === tagName).map(e => e.id)]);
 
         // remove all selected events with the tag
-        const normalSelected = SC.allEventsICS.filter(e => !SC.filteredEventsICS.includes(e) && !isEventChecked(e));
+        const normalSelected = SC.allEventsICS.filter(e => !SC.filteredEventsICS.includes(e) && isEventChecked(e));
         setSelectedEvents(selectedEvents.filter(i => normalSelected.find(e => e.id === i)?.tagName !== tagName));
     }
 
@@ -154,16 +154,16 @@ function ExportModal() {
                         <div className={`${SC.allEventsICS.length !== 0 ? '' : 'hidden'} m-1 my-3 border-2 border-gray-200`}>
                             <ul className={`${Object.keys(SC.tags).length < 8 ? '' : 'h-64'} px-2 py-2 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton`}>
                                 {Object.keys(SC.tags).map((tagName) => (
-                                    <li>
-                                        <label htmlFor={`id-${tagName}`} className="flex h-8 items-center rounded hover:bg-sky-600 text-gray-900 hover:text-gray-50  ">
-                                            <div className="w-full ms-2 text-sm font-medium  rounded">
-                                                <input checked={isTagChecked(tagName)} onChange={(event) => handleTagCheckBox(event, tagName)} id={`id-${tagName}`} type="checkbox" value="" className="w-4 h-4 me-2 text-blue-600 bg-gray-100 border-gray-300 hover:text-gray-50 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                                <span>
-                                                    {titleCase(tagName.replace(/[0-9]+[-]/, ''))}
-                                                </span>
-                                            </div>
-                                        </label>
-                                    </li>
+                                <li key={tagName}>
+                                    <label htmlFor={`id-${tagName}`} className="flex h-8 items-center rounded hover:bg-sky-600 text-gray-900 hover:text-gray-50  ">
+                                    <div className="w-full ms-2 text-sm font-medium  rounded">
+                                        <input checked={isTagChecked(tagName)} onChange={(event) => handleTagCheckBox(event, tagName)} id={`id-${tagName}`} type="checkbox" value="" className="w-4 h-4 me-2 text-blue-600 bg-gray-100 border-gray-300 hover:text-gray-50 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
+                                        <span>
+                                        {titleCase(tagName.replace(/[0-9]+[-]/, ''))}
+                                        </span>
+                                    </div>
+                                    </label>
+                                </li>
                                 ))}
                             </ul>
                         </div>

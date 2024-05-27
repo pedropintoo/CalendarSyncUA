@@ -149,6 +149,7 @@ function ImportModal() {
     console.log("Events to import: ", eventsToImport);
     let newTags = {}
     let newEvents = [] as EventICSProps[];
+    let i = 0;
     eventsToImport.forEach(event => {
       if (!unselectedEvents.includes(event.id)) {
         newEvents.push(event);
